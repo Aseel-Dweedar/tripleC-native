@@ -3,8 +3,8 @@
 const bcrypt = require("bcrypt");
 const { userModel } = require("../models/user.model");
 const crypto = require("crypto");
-const jwt = require('jsonwebtoken');
-const tokenModel = require('../models/token.model');
+const jwt = require("jsonwebtoken");
+const tokenModel = require("../models/token.model");
 
 // // // // // // // global functions // // // //
 async function findByUsername(username) {
@@ -33,7 +33,7 @@ const creatUser = async (req, res) => {
         car: [],
       });
       newUser.save();
-      res.send(newUser);
+      res.send("User created successfully !!");
     }
   } catch (error) {
     console.log(error);
@@ -64,12 +64,11 @@ const userLogin = async (req, res) => {
           let newToken = new tokenModel({
             userId: user._id,
             token: token,
-          })
+          });
           newToken.save();
         }
         res.send({ token: token, ...user._doc });
       });
-
     } else {
       res.send("Incorrect password !!");
     }

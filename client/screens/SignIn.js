@@ -6,8 +6,10 @@ import InputField from "../components/InputField";
 import CustomButton from "../components/CustomButton";
 import Icons from "../components/Icons";
 import Cookies from "universal-cookie";
+import axios from "axios";
 
 const cookies = new Cookies();
+const API_URL = process.env.API_URL;
 
 const SignIn = ({ navigation }) => {
   const [username, setUsername] = useState("");
@@ -22,8 +24,14 @@ const SignIn = ({ navigation }) => {
 
   const signInBtnEvent = () => {
     if (username && password) {
-      navigation.navigate("Main");
-      cookies.set("user", { username: username, password: password }, { path: "/" });
+      axios.post(`${API_URL}/user/login`, { username, password }).then((axiosResponse) => {
+        if (axiosResponse.data.token) {
+          cookies.set("user", axiosResponse.data, { path: "/" });
+          navigation.navigate("Main");
+        } else {
+          alert(axiosResponse.data);
+        }
+      });
     } else {
       alert("Please Enter Username & Password!");
     }

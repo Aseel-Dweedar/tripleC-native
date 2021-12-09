@@ -5,8 +5,9 @@ import AuthScreens from "../components/AuthScreens";
 import InputField from "../components/InputField";
 import CustomButton from "../components/CustomButton";
 import Cookies from "universal-cookie";
+import axios from "axios";
 
-const cookies = new Cookies();
+const API_URL = process.env.API_URL;
 
 const SignUp = ({ navigation }) => {
   const [username, setUsername] = React.useState("");
@@ -32,9 +33,12 @@ const SignUp = ({ navigation }) => {
   };
 
   const signUpBtnEvent = () => {
-    //  axios.post("")
-    navigation.navigate("Main");
+    axios.post(`${API_URL}/user`, { username, firstName, lastName, password, phone }).then((axiosResponse) => {
+      alert(axiosResponse.data);
+      navigation.navigate("SignIn");
+    });
   };
+
   const moveToSignIn = () => {
     navigation.navigate("SignIn");
   };
@@ -49,7 +53,7 @@ const SignUp = ({ navigation }) => {
           <InputField placeholder="Password" name="lock" onChangeText={onChangePassword} value={password} />
           <InputField placeholder="Phone" name="phone" onChangeText={onChangePhone} value={phone} />
         </View>
-        <CustomButton title="Sign-in" btn={styles.btn} btnText={styles.btnText} onPress={signUpBtnEvent} />
+        <CustomButton title="Sign-Up" btn={styles.btn} btnText={styles.btnText} onPress={signUpBtnEvent} />
         <View style={styles.textContainer}>
           <Text>Already have an account?</Text>
           <TouchableOpacity onPress={moveToSignIn}>
