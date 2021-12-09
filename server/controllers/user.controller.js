@@ -3,6 +3,8 @@
 const bcrypt = require("bcrypt");
 const { userModel } = require("../models/user.model");
 const crypto = require("crypto");
+const jwt = require('jsonwebtoken');
+const tokenModel = require('../models/token.model');
 
 // // // // // // // global functions // // // //
 async function findByUsername(username) {
@@ -54,8 +56,20 @@ const userLogin = async (req, res) => {
     if (!user) return res.send("Cannot find user !");
     if (await bcrypt.compare(password, user.password)) {
       const token = crypto.randomBytes(64).toString("hex");
-      console.log(token);
-      res.send(token);
+
+      tokenModel.findOneAndUpdate({ userId: user._id }, { token: token }, { new: true }, (err, data) => {
+        if (err) {
+          res.send(err);
+        } else if (data === null) {
+          let newToken = new tokenModel({
+            userId: user._id,
+            token: token,
+          })
+          newToken.save();
+        }
+        res.send({ token: token, ...user._doc });
+      });
+
     } else {
       res.send("Incorrect password !!");
     }
