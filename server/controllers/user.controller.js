@@ -57,13 +57,13 @@ const userLogin = async (req, res) => {
     if (await bcrypt.compare(password, user.password)) {
       const token = crypto.randomBytes(64).toString("hex");
 
-      tokenModel.findOneAndUpdate({ userId: user._id }, { token: token }, { new: true }, (err, data) => {
+      tokenModel.findOneAndUpdate({ user }, { token: token }, { new: true }, (err, data) => {
         if (err) {
           res.send(err);
         } else if (data === null) {
           let newToken = new tokenModel({
-            userId: user._id,
             token: token,
+            user: user,
           });
           newToken.save();
         }

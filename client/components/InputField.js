@@ -8,7 +8,7 @@ const InputField = (props) => {
     <View style={styles.input}>
       <FontAwesome style={styles.icon} name={props.name} size={22} />
       <TextInput
-        value={props.value}
+        value={props.value || ""}
         maxLength={20}
         placeholder={props.placeholder}
         autoCapitalize="none"

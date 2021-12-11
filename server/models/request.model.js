@@ -1,27 +1,24 @@
 "use strict";
 
 const mongoose = require("mongoose");
-const { locationModel } = require("./location.model");
 
 const requestSchema = new mongoose.Schema({
-    name: String,
-    description: String,
-    phone: String,
-    isTaken: Boolean,
-    car: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "cars",
-    },
-    location: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: locationModel,
-    },
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "users",
-    },
+  name: String,
+  description: String,
+  phone: String,
+  isTaken: Boolean,
+  location: Object,
+  deleted: Boolean,
+  car: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Car",
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
 });
 
-const requestModel = mongoose.model("requests", requestSchema);
+const requestModel = mongoose.model("Request", requestSchema);
 
 module.exports = { requestSchema, requestModel };

@@ -24,7 +24,7 @@ const SelectCarRequest = (props) => {
               return (
                 <RadioButtonItem
                   style={{ marginBottom: 5 }}
-                  value={car}
+                  value={car._id}
                   label={
                     <Text style={{ color: colors.lightGray }}>
                       {car.type} - {car.year}

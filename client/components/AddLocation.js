@@ -22,8 +22,10 @@ const AddLocation = (props) => {
         setChecked(false);
         return;
       });
-      props.setLocation(location);
-      console.log(location);
+      props.setLocation({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      });
     }
   }, [isChecked]);
 
@@ -43,7 +45,11 @@ const AddLocation = (props) => {
       </MapView>
     )
   ) : (
-    <TextInput style={{ ...styles.map, backgroundColor: colors.lightGray }} />
+    <TextInput
+      style={{ ...styles.map, backgroundColor: colors.lightGray }}
+      value={props.value}
+      onChangeText={(value) => props.onChangeText(value)}
+    />
   );
 
   return (

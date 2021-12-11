@@ -4,7 +4,6 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import AuthScreens from "../components/AuthScreens";
 import InputField from "../components/InputField";
 import CustomButton from "../components/CustomButton";
-import Cookies from "universal-cookie";
 import axios from "axios";
 
 const API_URL = process.env.API_URL;

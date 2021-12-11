@@ -3,22 +3,22 @@ import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from "react-nati
 import { MaterialIcons } from "@expo/vector-icons";
 import colors from "../assets/colors/colors";
 
-const CarsList = (props) => {
+const requestsList = (props) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.mainText}>YOUR CARS</Text>
+      <Text style={styles.mainText}>YOUR REQUESTS</Text>
       <ScrollView style={{ width: "100%" }}>
-        {props.carsList.length &&
-          props.carsList.map((car, index) => {
+        {props.requestsList.length &&
+          props.requestsList.map((request, index) => {
             return (
-              <View key={index} style={styles.oneCar}>
+              <View key={index} style={styles.oneRequest}>
                 <View style={styles.textContainer}>
-                  <Text style={styles.text}>{car.type}</Text>
+                  <Text style={styles.text}>{request.name}</Text>
                 </View>
                 <View style={styles.textContainer}>
-                  <Text style={styles.text}>{car.model}</Text>
+                  <Text style={styles.text}>{request.description}</Text>
                 </View>
-                <TouchableOpacity style={{ width: "20%" }} onPress={() => props.deleteCar(car._id)}>
+                <TouchableOpacity style={{ width: "20%" }} onPress={() => props.deleteRequest(request._id)}>
                   <MaterialIcons name="delete" size={22} color={colors.secondary} />
                 </TouchableOpacity>
               </View>
@@ -32,7 +32,7 @@ const CarsList = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    margin: 40,
+    // margin: 40,
     alignItems: "center",
     backgroundColor: colors.primary,
   },
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 20,
   },
-  oneCar: {
+  oneRequest: {
     justifyContent: "space-between",
     flexDirection: "row",
     width: "100%",
@@ -51,11 +51,11 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   textContainer: {
-    width: "40%",
+    // width: "40%",
   },
   text: {
     color: colors.lightGray,
   },
 });
 
-export default CarsList;
+export default requestsList;

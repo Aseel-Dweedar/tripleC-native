@@ -1,46 +1,44 @@
 "use strict";
 
 const { carModel } = require("../models/car.model");
-const { userModel } = require("../models/user.model");
+
+const getUserCar = (res, user) => {
+  carModel.find({ user, deleted: false }, (error, data) => {
+    if (error) {
+      res.send(error.message);
+    } else {
+      res.send(data);
+    }
+  });
+};
 
 // // // // // // // CRETE // // // // // //
-const creatCar = async(req, res) => {
-    let { type, model, gasoline } = req.body;
-    let { userId } = req.params;
-
-    let newCar = new carModel({ type, model, gasoline });
-    newCar.save();
-
-    console.log({ userId });
-    let user = await userModel.findById(userId);
-    console.log({ user });
-    user.cars.push(newCar);
-    await user.save();
-
-    res.send(newCar);
+const creatCar = async (req, res) => {
+  let { type, model, gasoline } = req.body;
+  let user = req.user;
+  let newCar = new carModel({ type, model, gasoline, deleted: false });
+  newCar.user = user;
+  await newCar.save();
+  res.send(newCar);
 };
 
 // // // // // // // GET // // // // // //
 const getCar = (req, res) => {
-    carModel.find({}, (error, data) => {
-        if (error) {
-            res.send(error.message);
-        } else {
-            res.send(data);
-        }
-    });
+  let user = req.user;
+  getUserCar(res, user);
 };
 
 // // // // // // // DELETE // // // // // //
-const deleteCar = (req, res) => {
-    let { carId } = req.params.carId;
-    carModel.deleteOne({ carId }, (error, data) => {
-        if (error) {
-            res.send(error.message);
-        } else {
-            res.send("Done");
-        }
-    });
+const deleteCar = async (req, res) => {
+  let carId = req.params.carId;
+  let user = req.user;
+  carModel.findOneAndUpdate({ _id: carId }, { deleted: true }, { new: true }, (error, data) => {
+    if (error) {
+      res.send(error.message);
+    } else {
+      getUserCar(res, user);
+    }
+  });
 };
 
 module.exports = { creatCar, getCar, deleteCar };

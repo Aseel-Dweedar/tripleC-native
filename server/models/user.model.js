@@ -2,27 +2,32 @@
 
 const mongoose = require("mongoose");
 
-const userSchema = new mongoose.Schema({
-  username: String,
-  password: String,
-  firstName: String,
-  lastName: String,
-  phone: String,
-  image: String,
-  cars: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "cars",
-    },
-  ],
-  requests: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "requests",
-    },
-  ],
+const userSchema = new mongoose.Schema(
+  {
+    username: String,
+    password: String,
+    firstName: String,
+    lastName: String,
+    phone: String,
+    image: String,
+  },
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
+);
+
+userSchema.virtual("cars", {
+  ref: "Car",
+  localField: "_id",
+  foreignField: "user",
 });
 
-const userModel = mongoose.model("users", userSchema);
+userSchema.virtual("requests", {
+  ref: "Request",
+  localField: "_id",
+  foreignField: "user",
+});
 
+const userModel = mongoose.model("User", userSchema);
 module.exports = { userModel, userSchema };

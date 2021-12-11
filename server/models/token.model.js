@@ -3,10 +3,13 @@
 const mongoose = require("mongoose");
 
 const tokenSchema = new mongoose.Schema({
-    userId: String,
-    token: String,
+  token: String,
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
 });
 
-const tokenModel = mongoose.model("token", tokenSchema);
+const tokenModel = mongoose.model("Token", tokenSchema);
 
 module.exports = tokenModel;
