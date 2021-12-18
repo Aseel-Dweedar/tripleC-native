@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import colors from "../assets/colors/colors";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import AuthScreens from "../components/AuthScreens";
@@ -24,14 +24,19 @@ const SignIn = ({ navigation }) => {
 
   const signInBtnEvent = () => {
     if (username && password) {
-      axios.post(`${API_URL}/user/login`, { username, password }).then((axiosResponse) => {
-        if (axiosResponse.data.token) {
-          cookies.set("user", axiosResponse.data, { path: "/" });
-          navigation.navigate("Main");
-        } else {
-          alert(axiosResponse.data);
-        }
-      });
+      axios
+        .post(`${API_URL}/user/login`, { username, password })
+        .then((axiosResponse) => {
+          if (axiosResponse.data.token) {
+            cookies.set("user", axiosResponse.data, { path: "/" });
+            navigation.navigate("Main");
+          } else {
+            alert(axiosResponse.data);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } else {
       alert("Please Enter Username & Password!");
     }

@@ -82,6 +82,10 @@ const AddCar = ({ navigation }) => {
       });
   };
 
+  const goToRequest = () => {
+    navigation.navigate("Services");
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.carsContainer}>
@@ -102,7 +106,10 @@ const AddCar = ({ navigation }) => {
             <RadioButtonItem style={{ marginBottom: 5 }} value="Diesel" label="Diesel"></RadioButtonItem>
           </RadioButtonGroup>
         </View>
-        <CustomButton title="Submit" btn={styles.btn} btnText={styles.btnText} onPress={onSubmitAddCar} />
+        <View>
+          <CustomButton title="Request" btn={styles.btn} btnText={styles.btnText} onPress={goToRequest} />
+          <CustomButton title="Submit" btn={styles.btn} btnText={styles.btnText} onPress={onSubmitAddCar} />
+        </View>
       </View>
     </View>
   );

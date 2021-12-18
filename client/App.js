@@ -10,6 +10,7 @@ import SignIn from "./screens/SignIn";
 import SignUp from "./screens/SignUp";
 import AddService from "./screens/AddService";
 import AddCar from "./screens/AddCar";
+import Details from "./screens/Details";
 
 const Stack = createNativeStackNavigator();
 
@@ -30,6 +31,7 @@ export default function App() {
         <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="Contact" component={Contact} />
         <Stack.Screen name="AddService" component={AddService} />
+        <Stack.Screen name="Details" component={Details} />
       </Stack.Navigator>
     </NavigationContainer>
   );

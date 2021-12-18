@@ -45,9 +45,16 @@ const Profile = ({ navigation, route }) => {
         console.log(err);
       });
   };
+
   const goToRequest = () => {
     navigation.navigate("Services");
   };
+
+  const showRequest = (request) => {
+    localStorage.setItem("req", JSON.stringify(request));
+    navigation.navigate("Details");
+  };
+
   const signOut = () => {
     cookies.remove("user", { path: "/" });
     navigation.navigate("SignIn");
@@ -56,7 +63,7 @@ const Profile = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
       <Button title="Sign-Out" onPress={signOut} />
-      <RequestsList deleteRequest={deleteRequest} requestsList={requestsList} />
+      <RequestsList deleteRequest={deleteRequest} showRequest={showRequest} requestsList={requestsList} />
       <CustomButton title="Request" btn={styles.btn} btnText={styles.btnText} onPress={goToRequest} />
     </View>
   );

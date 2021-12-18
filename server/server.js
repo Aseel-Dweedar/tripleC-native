@@ -10,19 +10,19 @@ const { creatRequest, getRequest, deleteRequest } = require("./controllers/reque
 const { creatUser, getUser, userLogin } = require("./controllers/user.controller");
 const { creatCar, getCar, deleteCar } = require("./controllers/car.controller");
 
-mongoose
-  .connect("mongodb://localhost:27017/car-care", { useNewUrlParser: true })
-  .then((result) => {
-    console.log("Working");
-  })
-  .catch((err) => {
-    console.log("NOOOOOOOOO !!");
-    console.log(err);
-  });
-
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+mongoose
+  .connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then((value) => {
+    console.log("WORKING !!");
+  })
+  .catch((err) => {
+    console.log("NOOOOOOOOOOOOO !!");
+    console.log(err);
+  });
 
 const PORT = process.env.PORT;
 

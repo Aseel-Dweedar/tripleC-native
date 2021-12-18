@@ -8,7 +8,7 @@ const CarsList = (props) => {
     <View style={styles.container}>
       <Text style={styles.mainText}>YOUR CARS</Text>
       <ScrollView style={{ width: "100%" }}>
-        {props.carsList.length &&
+        {props.carsList.length ? (
           props.carsList.map((car, index) => {
             return (
               <View key={index} style={styles.oneCar}>
@@ -23,7 +23,10 @@ const CarsList = (props) => {
                 </TouchableOpacity>
               </View>
             );
-          })}
+          })
+        ) : (
+          <Text style={{ color: colors.lightGray, textAlign: "center" }}>YOUR CARS LIST IS EMPTY !!</Text>
+        )}
       </ScrollView>
     </View>
   );

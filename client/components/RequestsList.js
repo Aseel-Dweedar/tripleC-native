@@ -8,10 +8,10 @@ const requestsList = (props) => {
     <View style={styles.container}>
       <Text style={styles.mainText}>YOUR REQUESTS</Text>
       <ScrollView style={{ width: "100%" }}>
-        {props.requestsList.length &&
+        {props.requestsList.length ? (
           props.requestsList.map((request, index) => {
             return (
-              <View key={index} style={styles.oneRequest}>
+              <TouchableOpacity key={index} style={styles.oneRequest} onPress={() => props.showRequest(request)}>
                 <View style={styles.textContainer}>
                   <Text style={styles.text}>{request.name}</Text>
                 </View>
@@ -21,9 +21,12 @@ const requestsList = (props) => {
                 <TouchableOpacity style={{ width: "20%" }} onPress={() => props.deleteRequest(request._id)}>
                   <MaterialIcons name="delete" size={22} color={colors.secondary} />
                 </TouchableOpacity>
-              </View>
+              </TouchableOpacity>
             );
-          })}
+          })
+        ) : (
+          <Text style={{ color: colors.lightGray, textAlign: "center" }}>YOUR REQUESTS LIST IS EMPTY !!</Text>
+        )}
       </ScrollView>
     </View>
   );

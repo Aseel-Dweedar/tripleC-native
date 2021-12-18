@@ -75,7 +75,11 @@ const AddService = ({ navigation, route }) => {
       })
       .then((axiosRes) => {
         alert("Add successfully !!");
-        navigation.navigate("Services");
+        localStorage.setItem("req", JSON.stringify(axiosRes.data));
+        navigation.navigate("Details");
+      })
+      .catch((err) => {
+        console.log(err);
       });
   };
 
