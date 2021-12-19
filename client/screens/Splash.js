@@ -1,21 +1,27 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Image, StyleSheet, Text, View, Animated } from "react-native";
 import logo from "../assets/img/finalLogo.png";
 import colors from "../assets/colors/colors";
-import Cookies from "universal-cookie";
-
-const cookies = new Cookies();
+import { getUser } from "../assets/getUser";
 
 function Splash({ navigation }) {
-  setTimeout(() => {
-    if (cookies.get("user")) {
-      navigation.navigate("Main");
-    } else {
-      navigation.navigate("SignIn");
-    }
-  }, 1000);
-  // const fadeAnim = useRef(new Animated.Value(0)).current; // Initial value for opacity: 0
+  const [user, setUser] = useState(null);
 
+  useEffect(() => {
+    getUser()
+      .then((user) => {
+        setUser(() => user);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
+
+  setTimeout(() => {
+    user ? navigation.navigate("Main") : navigation.navigate("SignIn");
+  }, 1000);
+
+  // const fadeAnim = useRef(new Animated.Value(0)).current; // Initial value for opacity: 0
   // React.useEffect(() => {
   //   Animated.timing(fadeAnim, {
   //     toValue: 1,

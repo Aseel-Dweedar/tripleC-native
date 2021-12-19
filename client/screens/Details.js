@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import colors from "../assets/colors/colors";
 import CustomButton from "../components/CustomButton";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Details = ({ navigation, route }) => {
   const [req, setReq] = useState({});
@@ -11,8 +12,13 @@ const Details = ({ navigation, route }) => {
   }, []);
 
   const getReq = () => {
-    let storedReq = JSON.parse(localStorage.getItem("req"));
-    setReq(() => storedReq);
+    try {
+      AsyncStorage.getItem("req").then((storedReq) => {
+        setReq(() => JSON.parse(storedReq) || null);
+      });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const goToRequest = () => {

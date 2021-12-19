@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import colors from "../assets/colors/colors";
 import RadioButtonGroup, { RadioButtonItem } from "expo-radio-button";
 import CarsList from "../components/CarsList";
 import InputField from "../components/InputField";
 import CustomButton from "../components/CustomButton";
 import axios from "axios";
-import Cookies from "universal-cookie";
+import { getUser } from "../assets/getUser";
 
-const cookies = new Cookies();
 const API_URL = process.env.API_URL;
 
 const AddCar = ({ navigation }) => {
@@ -16,20 +15,35 @@ const AddCar = ({ navigation }) => {
   const [carType, setCarType] = useState("");
   const [carModel, setCarModel] = useState("");
   const [carsList, setCarsList] = useState([]);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    getCars();
+    getUser()
+      .then((user) => {
+        setUser(() => user);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }, []);
 
+  useEffect(() => {
+    if (user) {
+      getCars().then((cars) => {
+        setCarsList(() => cars);
+      });
+    }
+  }, [user]);
+
   const getCars = () => {
-    axios
+    return axios
       .get(`${API_URL}/car`, {
         headers: {
-          authorization: `Bearer ${cookies.get("user").token}`,
+          authorization: `Bearer ${user.token}`,
         },
       })
       .then((axiosRes) => {
-        setCarsList(axiosRes.data);
+        return axiosRes.data;
       })
       .catch((err) => {
         console.log(err);
@@ -48,7 +62,7 @@ const AddCar = ({ navigation }) => {
     axios
       .delete(`${API_URL}/car/${carId}`, {
         headers: {
-          authorization: `Bearer ${cookies.get("user").token}`,
+          authorization: `Bearer ${user.token}`,
         },
       })
       .then((axiosRes) => {
@@ -68,14 +82,16 @@ const AddCar = ({ navigation }) => {
     axios
       .post(`${API_URL}/car`, reqBody, {
         headers: {
-          authorization: `Bearer ${cookies.get("user").token}`,
+          authorization: `Bearer ${user.token}`,
         },
       })
       .then((axiosRes) => {
         setGasoline("");
         setCarType("");
         setCarModel("");
-        getCars();
+        getCars().then((cars) => {
+          setCarsList(() => cars);
+        });
       })
       .catch((err) => {
         console.log(err);

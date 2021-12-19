@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text } from "react-native";
-import Cookies from "universal-cookie";
+import { StyleSheet, View } from "react-native";
 import colors from "../assets/colors/colors";
 import InputField from "../components/InputField";
 import CustomButton from "../components/CustomButton";
@@ -8,8 +7,9 @@ import SelectCarRequest from "../components/SelectCarRequest";
 import AddLocation from "../components/AddLocation";
 import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
+import { getUser } from "../assets/getUser";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const cookies = new Cookies();
 const API_URL = process.env.API_URL;
 
 const AddService = ({ navigation, route }) => {
@@ -19,20 +19,35 @@ const AddService = ({ navigation, route }) => {
   const [phone, setPhone] = useState("");
   const [textLocation, setTextLocation] = useState("");
   const [carsList, setCarsList] = useState([]);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    getCars();
+    getUser()
+      .then((user) => {
+        setUser(() => user);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }, []);
 
+  useEffect(() => {
+    if (user) {
+      getCars().then((cars) => {
+        setCarsList(() => cars);
+      });
+    }
+  }, [user]);
+
   const getCars = () => {
-    axios
+    return axios
       .get(`${API_URL}/car`, {
         headers: {
-          authorization: `Bearer ${cookies.get("user").token}`,
+          authorization: `Bearer ${user.token}`,
         },
       })
       .then((axiosRes) => {
-        setCarsList(axiosRes.data);
+        return axiosRes.data;
       })
       .catch((err) => {
         console.log(err);
@@ -70,13 +85,16 @@ const AddService = ({ navigation, route }) => {
     axios
       .post(`${API_URL}/request`, reqBody, {
         headers: {
-          authorization: `Bearer ${cookies.get("user").token}`,
+          authorization: `Bearer ${user.token}`,
         },
       })
-      .then((axiosRes) => {
-        alert("Add successfully !!");
-        localStorage.setItem("req", JSON.stringify(axiosRes.data));
-        navigation.navigate("Details");
+      .then(async (axiosRes) => {
+        try {
+          await AsyncStorage.setItem("req", JSON.stringify(axiosRes.data));
+          navigation.navigate("Details");
+        } catch (e) {
+          console.log(e);
+        }
       })
       .catch((err) => {
         console.log(err);

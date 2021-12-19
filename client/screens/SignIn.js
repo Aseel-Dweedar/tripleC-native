@@ -1,19 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import colors from "../assets/colors/colors";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import AuthScreens from "../components/AuthScreens";
 import InputField from "../components/InputField";
 import CustomButton from "../components/CustomButton";
 import Icons from "../components/Icons";
-import Cookies from "universal-cookie";
 import axios from "axios";
 
-const cookies = new Cookies();
 const API_URL = process.env.API_URL;
 
 const SignIn = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(null);
+
+  if (isLoading) {
+    return (
+      <View>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
 
   const onChangeUsername = (value) => {
     setUsername(value.replace(/[^a-z||^1-9||_]/g, ""));
@@ -26,10 +34,14 @@ const SignIn = ({ navigation }) => {
     if (username && password) {
       axios
         .post(`${API_URL}/user/login`, { username, password })
-        .then((axiosResponse) => {
+        .then(async (axiosResponse) => {
           if (axiosResponse.data.token) {
-            cookies.set("user", axiosResponse.data, { path: "/" });
-            navigation.navigate("Main");
+            try {
+              await AsyncStorage.setItem("user", JSON.stringify(axiosResponse.data));
+              navigation.navigate("Main");
+            } catch (e) {
+              console.log(e);
+            }
           } else {
             alert(axiosResponse.data);
           }

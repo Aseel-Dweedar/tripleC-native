@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from "react-native";
 import colors from "../assets/colors/colors";
 import RadioButtonGroup, { RadioButtonItem } from "expo-radio-button";
 
@@ -12,7 +12,7 @@ const SelectCarRequest = (props) => {
           <Text style={{ color: colors.secondary }}>+ Add Car</Text>
         </TouchableOpacity>
       </View>
-      <View>
+      <ScrollView>
         {props.carsList.length ? (
           <RadioButtonGroup
             containerStyle={{ marginBottom: 10 }}
@@ -40,7 +40,7 @@ const SelectCarRequest = (props) => {
         ) : (
           <Text style={{ color: colors.primary }}>lOADING</Text>
         )}
-      </View>
+      </ScrollView>
     </View>
   );
 };

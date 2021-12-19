@@ -16,6 +16,7 @@ const SignUp = ({ navigation }) => {
   const [phone, setPhone] = React.useState("");
 
   const onChangeUsername = (value) => {
+    // add get request
     setUsername(value.replace(/[^a-z||^1-9||_]/g, ""));
   };
   const onChangeFirstName = (value) => {
