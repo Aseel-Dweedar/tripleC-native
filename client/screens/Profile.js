@@ -1,21 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Button } from "react-native";
+import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
 import colors from "../assets/colors/colors";
 import axios from "axios";
 import RequestsList from "../components/RequestsList";
 import CustomButton from "../components/CustomButton";
 import { getUser } from "../assets/getUser";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import UserProfileData from "../components/UserProfileData";
+import { FontAwesome } from "@expo/vector-icons";
 
 const API_URL = process.env.API_URL;
 
-const Profile = ({ navigation, route }) => {
+const Profile = ({ navigation }) => {
   const [requestsList, setRequestsList] = useState(null);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
     getUser()
       .then((user) => {
+        console.log("user ", user);
         setUser(() => user);
       })
       .catch((err) => {
@@ -88,7 +91,11 @@ const Profile = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
       <View style={styles.profileContainer}>
-        <Button title="Sign-Out" onPress={signOut} />
+        <TouchableOpacity style={styles.logOutContainer} onPress={signOut}>
+          <FontAwesome name="sign-out" size={22} color={colors.secondary} />
+          <Text style={styles.logOutText}>Sign-Out</Text>
+        </TouchableOpacity>
+        {user && <UserProfileData user={user} />}
       </View>
       <View style={styles.requestsContainer}>
         <RequestsList deleteRequest={deleteRequest} showRequest={showRequest} requestsList={requestsList} />
@@ -109,9 +116,25 @@ const Profile = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 3,
+    paddingTop: 50,
+    backgroundColor: colors.lightGray,
   },
   profileContainer: {
     flex: 1,
+    paddingHorizontal: 30,
+  },
+  logOutContainer: {
+    flexDirection: "row",
+    padding: 7,
+    marginBottom: 10,
+    backgroundColor: colors.primary,
+    borderRadius: 15,
+    alignItems: "center",
+    alignSelf: "flex-end",
+  },
+  logOutText: {
+    color: colors.lightGray,
+    marginLeft: 10,
   },
   requestsContainer: {
     borderTopLeftRadius: 40,
