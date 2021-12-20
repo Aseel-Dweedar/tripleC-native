@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 import colors from "../assets/colors/colors";
 import InputField from "../components/InputField";
 import CustomButton from "../components/CustomButton";
@@ -18,7 +18,7 @@ const AddService = ({ navigation, route }) => {
   const [description, setDescription] = useState("");
   const [phone, setPhone] = useState("");
   const [textLocation, setTextLocation] = useState("");
-  const [carsList, setCarsList] = useState([]);
+  const [carsList, setCarsList] = useState(null);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -33,21 +33,19 @@ const AddService = ({ navigation, route }) => {
 
   useEffect(() => {
     if (user) {
-      getCars().then((cars) => {
-        setCarsList(() => cars);
-      });
+      getCars();
     }
   }, [user]);
 
   const getCars = () => {
-    return axios
+    axios
       .get(`${API_URL}/car`, {
         headers: {
           authorization: `Bearer ${user.token}`,
         },
       })
       .then((axiosRes) => {
-        return axiosRes.data;
+        setCarsList(() => axiosRes.data);
       })
       .catch((err) => {
         console.log(err);
@@ -71,44 +69,43 @@ const AddService = ({ navigation, route }) => {
   };
 
   const onSubmitRequest = () => {
-    if (currentCar === null && (location === null || textLocation === "")) {
+    if (description && phone && currentCar && (location || textLocation)) {
+      let reqBody = {
+        name: route.params.serviceName,
+        phone: phone,
+        description: description,
+        car: currentCar,
+        location: location || { textLocation },
+      };
+      axios
+        .post(`${API_URL}/request`, reqBody, {
+          headers: {
+            authorization: `Bearer ${user.token}`,
+          },
+        })
+        .then(async (axiosRes) => {
+          try {
+            await AsyncStorage.setItem("req", JSON.stringify(axiosRes.data));
+            navigation.navigate("Details");
+          } catch (e) {
+            console.log(e);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
       alert("Please Fill All Fields!");
-      return;
     }
-    let reqBody = {
-      name: route.params.serviceName,
-      phone: phone,
-      description: description,
-      car: currentCar,
-      location: location || { textLocation },
-    };
-    axios
-      .post(`${API_URL}/request`, reqBody, {
-        headers: {
-          authorization: `Bearer ${user.token}`,
-        },
-      })
-      .then(async (axiosRes) => {
-        try {
-          await AsyncStorage.setItem("req", JSON.stringify(axiosRes.data));
-          navigation.navigate("Details");
-        } catch (e) {
-          console.log(e);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.InputContainer}>
-        {/* <View>
-          <Ionicons style={styles.icon} name="settings" size={22} color={colors.secondary} />
-          <Text>{route.params.serviceName}</Text>
-        </View> */}
-        <InputField placeholder={route.params.serviceName} name="user" />
+        <View style={styles.titleCont}>
+          <Ionicons name="settings" size={24} color={colors.secondary} />
+          <Text style={styles.text}>{route.params.serviceName}</Text>
+        </View>
         <InputField
           placeholder="Description"
           name="newspaper-o"
@@ -136,7 +133,7 @@ const AddService = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 4,
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: colors.primary,
@@ -148,9 +145,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
-  icon: {
-    paddingHorizontal: 10,
-    color: colors.primary,
+  titleCont: {
+    marginVertical: 20,
+    flexDirection: "row",
+  },
+  text: {
+    color: colors.lightGray,
+    fontSize: 20,
+    marginHorizontal: 10,
   },
   btn: {
     backgroundColor: colors.secondary,

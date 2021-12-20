@@ -8,7 +8,7 @@ const CarsList = (props) => {
     <View style={styles.container}>
       <Text style={styles.mainText}>YOUR CARS</Text>
       <ScrollView style={{ width: "100%" }}>
-        {props.carsList.length ? (
+        {props.carsList && props.carsList.length ? (
           props.carsList.map((car, index) => {
             return (
               <View key={index} style={styles.oneCar}>

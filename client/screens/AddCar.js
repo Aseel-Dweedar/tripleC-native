@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import colors from "../assets/colors/colors";
 import RadioButtonGroup, { RadioButtonItem } from "expo-radio-button";
 import CarsList from "../components/CarsList";
@@ -29,21 +29,19 @@ const AddCar = ({ navigation }) => {
 
   useEffect(() => {
     if (user) {
-      getCars().then((cars) => {
-        setCarsList(() => cars);
-      });
+      getCars();
     }
   }, [user]);
 
   const getCars = () => {
-    return axios
+    axios
       .get(`${API_URL}/car`, {
         headers: {
           authorization: `Bearer ${user.token}`,
         },
       })
       .then((axiosRes) => {
-        return axiosRes.data;
+        setCarsList(() => axiosRes.data);
       })
       .catch((err) => {
         console.log(err);
@@ -74,28 +72,32 @@ const AddCar = ({ navigation }) => {
   };
 
   const onSubmitAddCar = () => {
-    let reqBody = {
-      type: carType,
-      gasoline: gasoline,
-      model: carModel,
-    };
-    axios
-      .post(`${API_URL}/car`, reqBody, {
-        headers: {
-          authorization: `Bearer ${user.token}`,
-        },
-      })
-      .then((axiosRes) => {
-        setGasoline("");
-        setCarType("");
-        setCarModel("");
-        getCars().then((cars) => {
-          setCarsList(() => cars);
+    if (gasoline && carType && carModel) {
+      let reqBody = {
+        type: carType,
+        gasoline: gasoline,
+        model: carModel,
+      };
+      axios
+        .post(`${API_URL}/car`, reqBody, {
+          headers: {
+            authorization: `Bearer ${user.token}`,
+          },
+        })
+        .then((axiosRes) => {
+          setGasoline("");
+          setCarType("");
+          setCarModel("");
+          getCars().then((cars) => {
+            setCarsList(() => cars);
+          });
+        })
+        .catch((err) => {
+          console.log(err);
         });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    } else {
+      alert("Please Fill All Fields!");
+    }
   };
 
   const goToRequest = () => {
@@ -107,24 +109,32 @@ const AddCar = ({ navigation }) => {
       <View style={styles.carsContainer}>
         <CarsList deleteCar={deleteCar} carsList={carsList} />
       </View>
-      <View style={styles.formContainer}>
-        <InputField placeholder="Car Type" name="car" onChangeText={onChangCarType} value={carType} />
-        <InputField placeholder="Car Model" name="car" onChangeText={onChangeCarModel} value={carModel} />
-        <View>
-          <RadioButtonGroup
-            containerStyle={{ marginBottom: 10 }}
-            selected={gasoline}
-            onSelected={setGasoline}
-            radioBackground={colors.secondary}
-          >
-            <RadioButtonItem style={{ marginBottom: 5 }} value="Octan-90" label="Octan-90"></RadioButtonItem>
-            <RadioButtonItem style={{ marginBottom: 5 }} value="Octan-95" label="Octan-95"></RadioButtonItem>
-            <RadioButtonItem style={{ marginBottom: 5 }} value="Diesel" label="Diesel"></RadioButtonItem>
-          </RadioButtonGroup>
+      <View style={styles.addCarContainer}>
+        <View style={styles.inputContainer}>
+          <InputField placeholder="Car Type" name="car" onChangeText={onChangCarType} value={carType} />
+          <InputField placeholder="Car Model" name="car" onChangeText={onChangeCarModel} value={carModel} />
+          <View>
+            <Text style={{ margin: 10, fontWeight: "bold" }}>Choose gasoline type :</Text>
+            <RadioButtonGroup
+              containerStyle={{ marginBottom: 10 }}
+              selected={gasoline}
+              onSelected={setGasoline}
+              radioBackground={colors.secondary}
+            >
+              <RadioButtonItem style={{ marginBottom: 5 }} value="Octan-90" label="Octan-90"></RadioButtonItem>
+              <RadioButtonItem style={{ marginBottom: 5 }} value="Octan-95" label="Octan-95"></RadioButtonItem>
+              <RadioButtonItem style={{ marginBottom: 5 }} value="Diesel" label="Diesel"></RadioButtonItem>
+            </RadioButtonGroup>
+          </View>
         </View>
-        <View>
-          <CustomButton title="Request" btn={styles.btn} btnText={styles.btnText} onPress={goToRequest} />
+        <View style={styles.btnContainer}>
           <CustomButton title="Submit" btn={styles.btn} btnText={styles.btnText} onPress={onSubmitAddCar} />
+          <CustomButton
+            title="Request"
+            btn={{ ...styles.btn, backgroundColor: colors.lightGray }}
+            btnText={styles.btnText}
+            onPress={goToRequest}
+          />
         </View>
       </View>
     </View>
@@ -144,17 +154,22 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 40,
     borderBottomRightRadius: 40,
   },
-  formContainer: {
+  addCarContainer: {
     backgroundColor: colors.lightGray,
     width: "80%",
     flex: 2,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: "space-around",
+    alignItems: "flex-start",
+  },
+  inputContainer: {
+    width: "100%",
+  },
+  btnContainer: {
+    width: "100%",
   },
   btn: {
     backgroundColor: colors.secondary,
-    width: "50%",
-    marginVertical: 40,
+    margin: 10,
   },
   btnText: {
     color: colors.primary,

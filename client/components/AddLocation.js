@@ -7,7 +7,7 @@ import colors from "../assets/colors/colors";
 import Checkbox from "expo-checkbox";
 
 const AddLocation = (props) => {
-  const [isWeb, setIsWeb] = useState(Device.brand);
+  const [isDevice, setIsDevice] = useState(Device.brand);
   const [isChecked, setChecked] = useState(false);
 
   useEffect(async () => {
@@ -29,28 +29,28 @@ const AddLocation = (props) => {
     }
   }, [isChecked]);
 
-  const locationRender = isChecked ? (
-    props.location &&
-    isWeb && (
-      <MapView
-        initialRegion={{
-          latitude: props.location.coords.latitude,
-          longitude: props.location.coords.longitude,
-          latitudeDelta: 0.01,
-          longitudeDelta: 0.01,
-        }}
-        style={styles.map}
-      >
-        <MapView.Marker coordinate={props.location.coords} title="My Marker" description="Some description" />
-      </MapView>
-    )
-  ) : (
+  let locationRender = (
     <TextInput
       style={{ ...styles.map, backgroundColor: colors.lightGray }}
       value={props.value}
       onChangeText={(value) => props.onChangeText(value)}
     />
   );
+  if (isChecked && !!props.location && isDevice) {
+    locationRender = (
+      <MapView
+        initialRegion={{
+          latitude: props.location.latitude,
+          longitude: props.location.longitude,
+          latitudeDelta: 0.01,
+          longitudeDelta: 0.01,
+        }}
+        style={styles.map}
+      >
+        <MapView.Marker coordinate={props.location} title="My Marker" description="Your Location" />
+      </MapView>
+    );
+  }
 
   return (
     <View style={styles.locationContainer}>
@@ -72,12 +72,12 @@ const AddLocation = (props) => {
 const styles = StyleSheet.create({
   locationContainer: {
     flex: 1,
-    marginTop: 20,
+    marginVertical: 20,
     width: "90%",
   },
   map: {
     width: "100%",
-    height: 150,
+    height: 100,
   },
   textLightGray: {
     color: colors.lightGray,

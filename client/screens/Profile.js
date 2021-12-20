@@ -25,21 +25,19 @@ const Profile = ({ navigation, route }) => {
 
   useEffect(() => {
     if (user) {
-      getRequests().then((requests) => {
-        setRequestsList(() => requests);
-      });
+      getRequests();
     }
   }, [user]);
 
   const getRequests = () => {
-    return axios
+    axios
       .get(`${API_URL}/request`, {
         headers: {
           authorization: `Bearer ${user.token}`,
         },
       })
       .then((axiosRes) => {
-        return axiosRes.data;
+        setRequestsList(() => axiosRes.data);
       })
       .catch((err) => {
         console.log(err);
@@ -65,6 +63,10 @@ const Profile = ({ navigation, route }) => {
     navigation.navigate("Services");
   };
 
+  const goToCars = () => {
+    navigation.navigate("AddCar");
+  };
+
   const showRequest = async (request) => {
     try {
       await AsyncStorage.setItem("req", JSON.stringify(request));
@@ -85,11 +87,21 @@ const Profile = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <Button title="Sign-Out" onPress={signOut} />
-      {requestsList && (
+      <View style={styles.profileContainer}>
+        <Button title="Sign-Out" onPress={signOut} />
+      </View>
+      <View style={styles.requestsContainer}>
         <RequestsList deleteRequest={deleteRequest} showRequest={showRequest} requestsList={requestsList} />
-      )}
-      <CustomButton title="Request" btn={styles.btn} btnText={styles.btnText} onPress={goToRequest} />
+        <View style={styles.btnContainer}>
+          <CustomButton title="My Cars" btn={styles.btn} btnText={styles.btnText} onPress={goToCars} />
+          <CustomButton
+            title="Add Request"
+            btn={{ width: "40%", backgroundColor: colors.primary }}
+            btnText={{ color: colors.secondary }}
+            onPress={goToRequest}
+          />
+        </View>
+      </View>
     </View>
   );
 };
@@ -97,15 +109,26 @@ const Profile = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 3,
-    margin: 40,
-    backgroundColor: colors.lightGray,
-    justifyContent: "center",
-    alignItems: "center",
+  },
+  profileContainer: {
+    flex: 1,
+  },
+  requestsContainer: {
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
+    backgroundColor: colors.primary,
+    padding: 20,
+    flex: 2,
+  },
+  btnContainer: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginBottom: 10,
   },
   btn: {
     backgroundColor: colors.secondary,
-    width: "50%",
-    marginVertical: 40,
+    width: "40%",
   },
   btnText: {
     color: colors.primary,

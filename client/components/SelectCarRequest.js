@@ -13,7 +13,7 @@ const SelectCarRequest = (props) => {
         </TouchableOpacity>
       </View>
       <ScrollView>
-        {props.carsList.length ? (
+        {props.carsList && props.carsList.length ? (
           <RadioButtonGroup
             containerStyle={{ marginBottom: 10 }}
             selected={props.currentCar}
@@ -38,7 +38,7 @@ const SelectCarRequest = (props) => {
             })}
           </RadioButtonGroup>
         ) : (
-          <Text style={{ color: colors.primary }}>lOADING</Text>
+          <Text style={{ color: colors.lightGray }}>List Empty, Please add a car</Text>
         )}
       </ScrollView>
     </View>
@@ -47,6 +47,7 @@ const SelectCarRequest = (props) => {
 const styles = StyleSheet.create({
   carsContainer: {
     width: "90%",
+    flex: 1,
   },
   textLightGray: {
     color: colors.lightGray,
