@@ -1,41 +1,37 @@
-import React, { useState, useEffect } from "react";
-import { Image, StyleSheet, Text, View, Animated } from "react-native";
+import React, { useState } from "react";
+import { Image, StyleSheet, Text, View } from "react-native";
 import logo from "../assets/img/finalLogo.png";
 import colors from "../assets/colors/colors";
 import { getUser } from "../assets/getUser";
+import BottomTabNavigator from "../navigation/BottomTapNavigator";
 
 function Splash({ navigation }) {
   const [user, setUser] = useState(null);
 
-  useEffect(() => {
+  setTimeout(() => {
     getUser()
       .then((user) => {
         setUser(() => user);
+        if (!user) {
+          navigation.navigate("SignIn");
+        }
       })
       .catch((err) => {
         console.error(err);
       });
-  }, []);
-
-  setTimeout(() => {
-    user ? navigation.navigate("Main") : navigation.navigate("SignIn");
   }, 1000);
 
-  // const fadeAnim = useRef(new Animated.Value(0)).current; // Initial value for opacity: 0
-  // React.useEffect(() => {
-  //   Animated.timing(fadeAnim, {
-  //     toValue: 1,
-  //     duration: 10000,
-  //   }).start();
-  // }, [fadeAnim]);
-
-  return (
-    <View style={styles.container}>
-      <Image source={logo} style={styles.img} />
-      <Text style={styles.text}>TRIPLE-C</Text>
-      <Text style={styles.secondText}>Car Caring Center</Text>
-    </View>
-  );
+  if (user) {
+    return <BottomTabNavigator />;
+  } else {
+    return (
+      <View style={styles.container}>
+        <Image source={logo} style={styles.img} />
+        <Text style={styles.text}>TRIPLE-C</Text>
+        <Text style={styles.secondText}>Car Caring Center</Text>
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({

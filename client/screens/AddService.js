@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, ActivityIndicator } from "react-native";
 import colors from "../assets/colors/colors";
 import InputField from "../components/InputField";
 import CustomButton from "../components/CustomButton";
@@ -19,6 +19,7 @@ const AddService = ({ navigation, route }) => {
   const [phone, setPhone] = useState("");
   const [textLocation, setTextLocation] = useState("");
   const [carsList, setCarsList] = useState(null);
+  const [carsListErr, setCarsListErr] = useState(null);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -48,7 +49,8 @@ const AddService = ({ navigation, route }) => {
         setCarsList(() => axiosRes.data);
       })
       .catch((err) => {
-        console.log(err);
+        setCarsListErr(() => err.message);
+        console.error(err);
       });
   };
 
@@ -83,14 +85,7 @@ const AddService = ({ navigation, route }) => {
             authorization: `Bearer ${user.token}`,
           },
         })
-        .then(async (axiosRes) => {
-          try {
-            await AsyncStorage.setItem("req", JSON.stringify(axiosRes.data));
-            navigation.navigate("Details");
-          } catch (e) {
-            console.log(e);
-          }
-        })
+        .then((axiosRes) => navigation.navigate("Details", { requestDetail: axiosRes.data }))
         .catch((err) => {
           console.log(err);
         });
@@ -98,6 +93,26 @@ const AddService = ({ navigation, route }) => {
       alert("Please Fill All Fields!");
     }
   };
+
+  let renderCarList = null;
+  if (carsList && !carsListErr) {
+    renderCarList = (
+      <SelectCarRequest
+        carsList={carsList}
+        setCurrentCar={(value) => setCurrentCar(value)}
+        currentCar={currentCar}
+        moveToAddCar={moveToAddCar}
+      />
+    );
+  } else if (!carsList && carsListErr) {
+    renderCarList = (
+      <View>
+        <Text>{carsListErr}</Text>
+      </View>
+    );
+  } else if (!carsList && !carsListErr) {
+    renderCarList = <ActivityIndicator size="large" />;
+  }
 
   return (
     <View style={styles.container}>
@@ -120,12 +135,7 @@ const AddService = ({ navigation, route }) => {
         onChangeText={onChangeTextLocation}
         value={textLocation}
       />
-      <SelectCarRequest
-        carsList={carsList}
-        setCurrentCar={(value) => setCurrentCar(value)}
-        currentCar={currentCar}
-        moveToAddCar={moveToAddCar}
-      />
+      {renderCarList}
       <CustomButton title="Submit" btn={styles.btn} btnText={styles.btnText} onPress={onSubmitRequest} />
     </View>
   );

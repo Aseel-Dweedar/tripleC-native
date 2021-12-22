@@ -18,7 +18,6 @@ const Profile = ({ navigation }) => {
   useEffect(() => {
     getUser()
       .then((user) => {
-        console.log("user ", user);
         setUser(() => user);
       })
       .catch((err) => {
@@ -70,14 +69,7 @@ const Profile = ({ navigation }) => {
     navigation.navigate("AddCar");
   };
 
-  const showRequest = async (request) => {
-    try {
-      await AsyncStorage.setItem("req", JSON.stringify(request));
-      navigation.navigate("Details");
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  const showRequest = async (request) => navigation.navigate("Details", { requestDetail: request });
 
   const signOut = async () => {
     try {

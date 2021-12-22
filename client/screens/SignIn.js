@@ -1,27 +1,20 @@
 import React, { useState } from "react";
 import colors from "../assets/colors/colors";
-import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AuthScreens from "../components/AuthScreens";
 import InputField from "../components/InputField";
 import CustomButton from "../components/CustomButton";
 import Icons from "../components/Icons";
 import axios from "axios";
+import BottomTabNavigator from "../navigation/BottomTapNavigator";
 
 const API_URL = process.env.API_URL;
 
 const SignIn = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(null);
-
-  if (isLoading) {
-    return (
-      <View>
-        <ActivityIndicator size="large" />
-      </View>
-    );
-  }
+  const [user, setUser] = useState(null);
 
   const onChangeUsername = (value) => {
     setUsername(value.replace(/[^a-z||^1-9||_]/g, ""));
@@ -38,7 +31,7 @@ const SignIn = ({ navigation }) => {
           if (axiosResponse.data.token) {
             try {
               await AsyncStorage.setItem("user", JSON.stringify(axiosResponse.data));
-              navigation.navigate("Main");
+              setUser(() => axiosResponse.data);
             } catch (e) {
               console.log(e);
             }
@@ -58,36 +51,44 @@ const SignIn = ({ navigation }) => {
     navigation.navigate("SignUp");
   };
 
-  return (
-    <AuthScreens>
-      <View style={styles.container}>
-        <View style={styles.InputContainer}>
-          <InputField placeholder="User name" name="user-o" onChangeText={onChangeUsername} value={username} />
-          <InputField placeholder="Password" name="lock" onChangeText={onChangePassword} value={password} />
+  if (user) {
+    return <BottomTabNavigator />;
+  } else {
+    return (
+      <AuthScreens>
+        <View style={styles.container}>
+          <View style={styles.InputContainer}>
+            <InputField placeholder="User name" name="user-o" onChangeText={onChangeUsername} value={username} />
+            <InputField placeholder="Password" name="lock" onChangeText={onChangePassword} value={password} />
+          </View>
+          <CustomButton title="Sign-in" btn={styles.btn} btnText={styles.btnText} onPress={signInBtnEvent} />
+          <View style={styles.textContainer}>
+            <Text>Don't have an account?</Text>
+            <TouchableOpacity onPress={moveToSignUp}>
+              <Text style={styles.signUp}>Sign-Up!</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.iconContainer}>
+            <Icons
+              name="facebook"
+              iconBackground={{ backgroundColor: colors.primary }}
+              icon={{ color: colors.lightGray }}
+            />
+            <Icons
+              name="phone"
+              iconBackground={{ backgroundColor: colors.primary }}
+              icon={{ color: colors.lightGray }}
+            />
+            <Icons
+              name="twitter"
+              iconBackground={{ backgroundColor: colors.primary }}
+              icon={{ color: colors.lightGray }}
+            />
+          </View>
         </View>
-        <CustomButton title="Sign-in" btn={styles.btn} btnText={styles.btnText} onPress={signInBtnEvent} />
-        <View style={styles.textContainer}>
-          <Text>Don't have an account?</Text>
-          <TouchableOpacity onPress={moveToSignUp}>
-            <Text style={styles.signUp}>Sign-Up!</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.iconContainer}>
-          <Icons
-            name="facebook"
-            iconBackground={{ backgroundColor: colors.primary }}
-            icon={{ color: colors.lightGray }}
-          />
-          <Icons name="phone" iconBackground={{ backgroundColor: colors.primary }} icon={{ color: colors.lightGray }} />
-          <Icons
-            name="twitter"
-            iconBackground={{ backgroundColor: colors.primary }}
-            icon={{ color: colors.lightGray }}
-          />
-        </View>
-      </View>
-    </AuthScreens>
-  );
+      </AuthScreens>
+    );
+  }
 };
 
 const styles = StyleSheet.create({

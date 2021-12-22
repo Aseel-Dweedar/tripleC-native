@@ -1,26 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { StyleSheet, View, Text } from "react-native";
 import colors from "../assets/colors/colors";
 import CustomButton from "../components/CustomButton";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Details = ({ navigation, route }) => {
-  const [req, setReq] = useState({});
-
-  useEffect(() => {
-    getReq();
-  }, []);
-
-  const getReq = () => {
-    try {
-      AsyncStorage.getItem("req").then((storedReq) => {
-        setReq(() => JSON.parse(storedReq) || null);
-      });
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   const goToRequest = () => {
     navigation.navigate("Profile");
   };
@@ -30,7 +13,9 @@ const Details = ({ navigation, route }) => {
       <View>
         <Text>HI</Text>
       </View>
-      <View>{req && <Text>{req.description}</Text>}</View>
+      <View>
+        <Text>{route.params.requestDetail.description}</Text>
+      </View>
       <CustomButton title="Profile" btn={styles.btn} btnText={styles.btnText} onPress={goToRequest} />
     </View>
   );
