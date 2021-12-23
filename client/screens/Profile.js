@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
+import { StyleSheet, View, TouchableOpacity, Text, ActivityIndicator } from "react-native";
 import colors from "../assets/colors/colors";
 import axios from "axios";
 import RequestsList from "../components/RequestsList";
@@ -14,8 +14,10 @@ const API_URL = process.env.API_URL;
 const Profile = ({ navigation }) => {
   const [requestsList, setRequestsList] = useState(null);
   const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
     getUser()
       .then((user) => {
         setUser(() => user);
@@ -39,10 +41,12 @@ const Profile = ({ navigation }) => {
         },
       })
       .then((axiosRes) => {
+        setIsLoading(false);
         setRequestsList(() => axiosRes.data);
       })
       .catch((err) => {
-        console.log(err);
+        setIsLoading(false);
+        alert("An error happens!! please try again later");
       });
   };
 
@@ -79,6 +83,14 @@ const Profile = ({ navigation }) => {
       console.log(e);
     }
   };
+
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator color={colors.secondary} size="large" />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>

@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import colors from "../assets/colors/colors";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, ActivityIndicator } from "react-native";
 import AuthScreens from "../components/AuthScreens";
 import InputField from "../components/InputField";
 import CustomButton from "../components/CustomButton";
@@ -9,14 +9,15 @@ import axios from "axios";
 const API_URL = process.env.API_URL;
 
 const SignUp = ({ navigation }) => {
-  const [username, setUsername] = React.useState("");
-  const [firstName, setFirstName] = React.useState("");
-  const [lastName, setLastName] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [phone, setPhone] = React.useState("");
+  const [username, setUsername] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [password, setPassword] = useState("");
+  const [phone, setPhone] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
+  // add get request
   const onChangeUsername = (value) => {
-    // add get request
     setUsername(value.replace(/[^a-z||^1-9||_]/g, ""));
   };
   const onChangeFirstName = (value) => {
@@ -33,26 +34,51 @@ const SignUp = ({ navigation }) => {
   };
 
   const signUpBtnEvent = () => {
-    axios.post(`${API_URL}/user`, { username, firstName, lastName, password, phone }).then((axiosResponse) => {
-      alert(axiosResponse.data);
-      navigation.navigate("SignIn");
-    });
+    if (username && firstName && lastName && password && phone) {
+      setIsLoading(true);
+      axios
+        .post(`${API_URL}/user`, { username, firstName, lastName, password, phone })
+        .then((axiosResponse) => {
+          setIsLoading(false);
+          alert(axiosResponse.data);
+          navigation.navigate("SignIn");
+        })
+        .catch((err) => {
+          setIsLoading(false);
+          alert("An error happens!! please try again later");
+        });
+    } else {
+      alert("Please Fill All Fields!");
+    }
   };
 
   const moveToSignIn = () => {
     navigation.navigate("SignIn");
   };
 
+  let inputDiv;
+  if (isLoading) {
+    inputDiv = (
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+        <ActivityIndicator color={colors.secondary} size="large" />
+      </View>
+    );
+  } else {
+    inputDiv = (
+      <View style={styles.InputContainer}>
+        <InputField placeholder="User name" name="user-o" onChangeText={onChangeUsername} value={username} />
+        <InputField placeholder="First Name" name="user-o" onChangeText={onChangeFirstName} value={firstName} />
+        <InputField placeholder="Last Name" name="user-o" onChangeText={onChangeLastName} value={lastName} />
+        <InputField placeholder="Password" name="lock" onChangeText={onChangePassword} value={password} />
+        <InputField placeholder="Phone" name="phone" onChangeText={onChangePhone} value={phone} placeholder="+962" />
+      </View>
+    );
+  }
+
   return (
     <AuthScreens>
       <View style={styles.container}>
-        <View style={styles.InputContainer}>
-          <InputField placeholder="User name" name="user-o" onChangeText={onChangeUsername} value={username} />
-          <InputField placeholder="First Name" name="user-o" onChangeText={onChangeFirstName} value={firstName} />
-          <InputField placeholder="Last Name" name="user-o" onChangeText={onChangeLastName} value={lastName} />
-          <InputField placeholder="Password" name="lock" onChangeText={onChangePassword} value={password} />
-          <InputField placeholder="Phone" name="phone" onChangeText={onChangePhone} value={phone} />
-        </View>
+        {inputDiv}
         <CustomButton title="Sign-Up" btn={styles.btn} btnText={styles.btnText} onPress={signUpBtnEvent} />
         <View style={styles.textContainer}>
           <Text>Already have an account?</Text>

@@ -8,10 +8,10 @@ import AddLocation from "../components/AddLocation";
 import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
 import { getUser } from "../assets/getUser";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import Spinner from "react-native-loading-spinner-overlay";
 
 const API_URL = process.env.API_URL;
-
+//
 const AddService = ({ navigation, route }) => {
   const [location, setLocation] = useState(null);
   const [currentCar, setCurrentCar] = useState(null);
@@ -21,6 +21,7 @@ const AddService = ({ navigation, route }) => {
   const [carsList, setCarsList] = useState(null);
   const [carsListErr, setCarsListErr] = useState(null);
   const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     getUser()
@@ -72,6 +73,7 @@ const AddService = ({ navigation, route }) => {
 
   const onSubmitRequest = () => {
     if (description && phone && currentCar && (location || textLocation)) {
+      setIsLoading(true);
       let reqBody = {
         name: route.params.serviceName,
         phone: phone,
@@ -85,14 +87,26 @@ const AddService = ({ navigation, route }) => {
             authorization: `Bearer ${user.token}`,
           },
         })
-        .then((axiosRes) => navigation.navigate("Details", { requestDetail: axiosRes.data }))
+        .then((axiosRes) => {
+          setIsLoading(false);
+          navigation.navigate("Details", { requestDetail: axiosRes.data });
+        })
         .catch((err) => {
-          console.log(err);
+          setIsLoading(false);
+          alert("An error happens!! please try again later");
         });
     } else {
       alert("Please Fill All Fields!");
     }
   };
+
+  if (isLoading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator color={colors.secondary} size="large" />
+      </View>
+    );
+  }
 
   let renderCarList = null;
   if (carsList && !carsListErr) {
@@ -111,7 +125,11 @@ const AddService = ({ navigation, route }) => {
       </View>
     );
   } else if (!carsList && !carsListErr) {
-    renderCarList = <ActivityIndicator size="large" />;
+    renderCarList = (
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+        <ActivityIndicator color={colors.secondary} size="large" />
+      </View>
+    );
   }
 
   return (
@@ -167,7 +185,7 @@ const styles = StyleSheet.create({
   btn: {
     backgroundColor: colors.secondary,
     width: "50%",
-    marginVertical: 40,
+    marginVertical: 20,
   },
   btnText: {
     color: colors.primary,

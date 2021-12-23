@@ -9,12 +9,13 @@ import axios from "axios";
 import { getUser } from "../assets/getUser";
 
 const API_URL = process.env.API_URL;
-
+//
 const AddCar = ({ navigation }) => {
   const [gasoline, setGasoline] = useState("");
   const [carType, setCarType] = useState("");
   const [carModel, setCarModel] = useState("");
-  const [carsList, setCarsList] = useState([]);
+  const [carsList, setCarsList] = useState(null);
+  const [carsListErr, setCarsListErr] = useState(null);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -44,7 +45,8 @@ const AddCar = ({ navigation }) => {
         setCarsList(() => axiosRes.data);
       })
       .catch((err) => {
-        console.log(err);
+        setCarsListErr(() => err);
+        alert("An error happens!! please try again later");
       });
   };
 
@@ -88,12 +90,10 @@ const AddCar = ({ navigation }) => {
           setGasoline("");
           setCarType("");
           setCarModel("");
-          getCars().then((cars) => {
-            setCarsList(() => cars);
-          });
+          getCars();
         })
         .catch((err) => {
-          console.log(err);
+          alert("An error happens!! please try again later");
         });
     } else {
       alert("Please Fill All Fields!");
@@ -107,7 +107,7 @@ const AddCar = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.carsContainer}>
-        <CarsList deleteCar={deleteCar} carsList={carsList} />
+        <CarsList deleteCar={deleteCar} carsList={carsList} carsListErr={carsListErr} />
       </View>
       <View style={styles.addCarContainer}>
         <View style={styles.inputContainer}>

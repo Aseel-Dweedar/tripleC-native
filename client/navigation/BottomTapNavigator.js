@@ -13,9 +13,7 @@ const BottomTabNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
-
+        tabBarIcon: () => {
           if (route.name === "Back") {
             return <AntDesign name="back" size={22} color={colors.secondary} />;
           } else if (route.name === "Profile") {
@@ -24,10 +22,15 @@ const BottomTabNavigator = () => {
             return <AntDesign name="contacts" size={22} color={colors.secondary} />;
           }
         },
-        tabBarActiveTintColor: "tomato",
-        tabBarInactiveTintColor: "gray",
+
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.primary,
         headerShown: false,
       })}
+      tabBarOptions={{
+        activeBackgroundColor: "#E6E6E6",
+        inactiveBackgroundColor: "#E6E6E6",
+      }}
     >
       <Tab.Screen name="Back" component={MainStackNavigator} />
       <Tab.Screen name="Profile" component={Profile} />

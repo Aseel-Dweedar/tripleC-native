@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import colors from "../assets/colors/colors";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AuthScreens from "../components/AuthScreens";
 import InputField from "../components/InputField";
@@ -15,6 +15,7 @@ const SignIn = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const onChangeUsername = (value) => {
     setUsername(value.replace(/[^a-z||^1-9||_]/g, ""));
@@ -25,6 +26,7 @@ const SignIn = ({ navigation }) => {
 
   const signInBtnEvent = () => {
     if (username && password) {
+      setIsLoading(true);
       axios
         .post(`${API_URL}/user/login`, { username, password })
         .then(async (axiosResponse) => {
@@ -32,15 +34,19 @@ const SignIn = ({ navigation }) => {
             try {
               await AsyncStorage.setItem("user", JSON.stringify(axiosResponse.data));
               setUser(() => axiosResponse.data);
-            } catch (e) {
-              console.log(e);
+              setIsLoading(false);
+            } catch (err) {
+              alert("An error happens!! please try again later");
+              setIsLoading(false);
             }
           } else {
+            setIsLoading(false);
             alert(axiosResponse.data);
           }
         })
         .catch((err) => {
-          console.log(err);
+          setIsLoading(false);
+          alert("An error happens!! please try again later");
         });
     } else {
       alert("Please Enter Username & Password!");
@@ -51,16 +57,29 @@ const SignIn = ({ navigation }) => {
     navigation.navigate("SignUp");
   };
 
+  let inputDiv;
+  if (isLoading) {
+    inputDiv = (
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+        <ActivityIndicator color={colors.secondary} size="large" />
+      </View>
+    );
+  } else {
+    inputDiv = (
+      <View style={styles.InputContainer}>
+        <InputField placeholder="User name" name="user-o" onChangeText={onChangeUsername} value={username} />
+        <InputField placeholder="Password" name="lock" onChangeText={onChangePassword} value={password} />
+      </View>
+    );
+  }
+
   if (user) {
     return <BottomTabNavigator />;
   } else {
     return (
       <AuthScreens>
         <View style={styles.container}>
-          <View style={styles.InputContainer}>
-            <InputField placeholder="User name" name="user-o" onChangeText={onChangeUsername} value={username} />
-            <InputField placeholder="Password" name="lock" onChangeText={onChangePassword} value={password} />
-          </View>
+          {inputDiv}
           <CustomButton title="Sign-in" btn={styles.btn} btnText={styles.btnText} onPress={signInBtnEvent} />
           <View style={styles.textContainer}>
             <Text>Don't have an account?</Text>
