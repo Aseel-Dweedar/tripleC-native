@@ -23,7 +23,6 @@ const Details = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 3,
     backgroundColor: colors.lightGray,
     justifyContent: "center",
     alignItems: "center",

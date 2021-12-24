@@ -8,10 +8,9 @@ import AddLocation from "../components/AddLocation";
 import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
 import { getUser } from "../assets/getUser";
-import Spinner from "react-native-loading-spinner-overlay";
 
 const API_URL = process.env.API_URL;
-//
+
 const AddService = ({ navigation, route }) => {
   const [location, setLocation] = useState(null);
   const [currentCar, setCurrentCar] = useState(null);

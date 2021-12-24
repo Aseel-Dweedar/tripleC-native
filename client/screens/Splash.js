@@ -3,35 +3,38 @@ import { Image, StyleSheet, Text, View } from "react-native";
 import logo from "../assets/img/finalLogo.png";
 import colors from "../assets/colors/colors";
 import { getUser } from "../assets/getUser";
-import BottomTabNavigator from "../navigation/BottomTapNavigator";
+// import BottomTabNavigator from "../navigation/BottomTapNavigator";
+// import { AuthStackNavigator } from "../navigation/NativeStackNavigator";
 
 function Splash({ navigation }) {
   const [user, setUser] = useState(null);
+  const [flag, setFlag] = useState(true);
 
   setTimeout(() => {
     getUser()
       .then((user) => {
         setUser(() => user);
-        if (!user) {
-          navigation.navigate("SignIn");
-        }
+        if (!user) navigation.navigate("SignIn");
+        else navigation.navigate("Main");
       })
       .catch((err) => {
         console.error(err);
       });
   }, 1000);
 
-  if (user) {
-    return <BottomTabNavigator />;
-  } else {
-    return (
-      <View style={styles.container}>
-        <Image source={logo} style={styles.img} />
-        <Text style={styles.text}>TRIPLE-C</Text>
-        <Text style={styles.secondText}>Car Caring Center</Text>
-      </View>
-    );
-  }
+  // if (user) {
+  //   return <BottomTabNavigator />;
+  // } else if (flag) {
+  return (
+    <View style={styles.container}>
+      <Image source={logo} style={styles.img} />
+      <Text style={styles.text}>TRIPLE-C</Text>
+      <Text style={styles.secondText}>Car Caring Center</Text>
+    </View>
+  );
+  // } else {
+  //   return <AuthStackNavigator />;
+  // }
 }
 
 const styles = StyleSheet.create({

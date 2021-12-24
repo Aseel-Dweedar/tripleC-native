@@ -1,9 +1,7 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
 
-const Contact = ({ navigation, route }) => {
+const Contact = () => {
   return (
     <View style={{ alignItems: "center", justifyContent: "center" }}>
       <Text>Contact</Text>

@@ -35,6 +35,7 @@ const SignIn = ({ navigation }) => {
               await AsyncStorage.setItem("user", JSON.stringify(axiosResponse.data));
               setUser(() => axiosResponse.data);
               setIsLoading(false);
+              // navigation.navigate("Splash");
             } catch (err) {
               alert("An error happens!! please try again later");
               setIsLoading(false);
@@ -75,6 +76,7 @@ const SignIn = ({ navigation }) => {
 
   if (user) {
     return <BottomTabNavigator />;
+    navigation.navigate("Main");
   } else {
     return (
       <AuthScreens>

@@ -9,7 +9,7 @@ import axios from "axios";
 import { getUser } from "../assets/getUser";
 
 const API_URL = process.env.API_URL;
-//
+
 const AddCar = ({ navigation }) => {
   const [gasoline, setGasoline] = useState("");
   const [carType, setCarType] = useState("");

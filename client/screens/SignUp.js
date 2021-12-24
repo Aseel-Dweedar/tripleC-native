@@ -16,7 +16,6 @@ const SignUp = ({ navigation }) => {
   const [phone, setPhone] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  // add get request
   const onChangeUsername = (value) => {
     setUsername(value.replace(/[^a-z||^1-9||_]/g, ""));
   };
