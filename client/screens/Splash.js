@@ -1,19 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import logo from "../assets/img/finalLogo.png";
 import colors from "../assets/colors/colors";
 import { getUser } from "../assets/getUser";
-// import BottomTabNavigator from "../navigation/BottomTapNavigator";
-// import { AuthStackNavigator } from "../navigation/NativeStackNavigator";
 
 function Splash({ navigation }) {
-  const [user, setUser] = useState(null);
-  const [flag, setFlag] = useState(true);
-
   setTimeout(() => {
     getUser()
       .then((user) => {
-        setUser(() => user);
         if (!user) navigation.navigate("SignIn");
         else navigation.navigate("Main");
       })
@@ -22,9 +16,6 @@ function Splash({ navigation }) {
       });
   }, 1000);
 
-  // if (user) {
-  //   return <BottomTabNavigator />;
-  // } else if (flag) {
   return (
     <View style={styles.container}>
       <Image source={logo} style={styles.img} />
@@ -32,9 +23,6 @@ function Splash({ navigation }) {
       <Text style={styles.secondText}>Car Caring Center</Text>
     </View>
   );
-  // } else {
-  //   return <AuthStackNavigator />;
-  // }
 }
 
 const styles = StyleSheet.create({

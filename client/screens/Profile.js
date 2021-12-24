@@ -8,7 +8,6 @@ import { getUser } from "../assets/getUser";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import UserProfileData from "../components/UserProfileData";
 import { FontAwesome } from "@expo/vector-icons";
-// import { AuthStackNavigator } from "../navigation/NativeStackNavigator";
 
 const API_URL = process.env.API_URL;
 

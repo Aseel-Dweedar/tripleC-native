@@ -7,14 +7,12 @@ import InputField from "../components/InputField";
 import CustomButton from "../components/CustomButton";
 import Icons from "../components/Icons";
 import axios from "axios";
-import BottomTabNavigator from "../navigation/BottomTapNavigator";
 
 const API_URL = process.env.API_URL;
 
 const SignIn = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const onChangeUsername = (value) => {
@@ -33,9 +31,8 @@ const SignIn = ({ navigation }) => {
           if (axiosResponse.data.token) {
             try {
               await AsyncStorage.setItem("user", JSON.stringify(axiosResponse.data));
-              setUser(() => axiosResponse.data);
               setIsLoading(false);
-              // navigation.navigate("Splash");
+              navigation.navigate("Main");
             } catch (err) {
               alert("An error happens!! please try again later");
               setIsLoading(false);
@@ -74,42 +71,33 @@ const SignIn = ({ navigation }) => {
     );
   }
 
-  if (user) {
-    return <BottomTabNavigator />;
-    navigation.navigate("Main");
-  } else {
-    return (
-      <AuthScreens>
-        <View style={styles.container}>
-          {inputDiv}
-          <CustomButton title="Sign-in" btn={styles.btn} btnText={styles.btnText} onPress={signInBtnEvent} />
-          <View style={styles.textContainer}>
-            <Text>Don't have an account?</Text>
-            <TouchableOpacity onPress={moveToSignUp}>
-              <Text style={styles.signUp}>Sign-Up!</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.iconContainer}>
-            <Icons
-              name="facebook"
-              iconBackground={{ backgroundColor: colors.primary }}
-              icon={{ color: colors.lightGray }}
-            />
-            <Icons
-              name="phone"
-              iconBackground={{ backgroundColor: colors.primary }}
-              icon={{ color: colors.lightGray }}
-            />
-            <Icons
-              name="twitter"
-              iconBackground={{ backgroundColor: colors.primary }}
-              icon={{ color: colors.lightGray }}
-            />
-          </View>
+  return (
+    <AuthScreens>
+      <View style={styles.container}>
+        {inputDiv}
+        <CustomButton title="Sign-in" btn={styles.btn} btnText={styles.btnText} onPress={signInBtnEvent} />
+        <View style={styles.textContainer}>
+          <Text>Don't have an account?</Text>
+          <TouchableOpacity onPress={moveToSignUp}>
+            <Text style={styles.signUp}>Sign-Up!</Text>
+          </TouchableOpacity>
         </View>
-      </AuthScreens>
-    );
-  }
+        <View style={styles.iconContainer}>
+          <Icons
+            name="facebook"
+            iconBackground={{ backgroundColor: colors.primary }}
+            icon={{ color: colors.lightGray }}
+          />
+          <Icons name="phone" iconBackground={{ backgroundColor: colors.primary }} icon={{ color: colors.lightGray }} />
+          <Icons
+            name="twitter"
+            iconBackground={{ backgroundColor: colors.primary }}
+            icon={{ color: colors.lightGray }}
+          />
+        </View>
+      </View>
+    </AuthScreens>
+  );
 };
 
 const styles = StyleSheet.create({
