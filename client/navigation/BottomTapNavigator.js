@@ -61,8 +61,8 @@ const BottomTabNavigator = () => {
       screenOptions={({ route }) => ({
         tabBarButton: CustomButton,
         tabBarIcon: () => {
-          if (route.name === "Main") {
-            return <AntDesign name="back" size={22} color={colors.secondary} />;
+          if (route.name === "Home") {
+            return <AntDesign name="home" size={22} color={colors.secondary} />;
           } else if (route.name === "Profile") {
             return <FontAwesome name="user" size={22} color={colors.secondary} />;
           } else if (route.name === "Contact") {
@@ -88,7 +88,7 @@ const BottomTabNavigator = () => {
         inactiveBackgroundColor: "#E6E6E6",
       }}
     >
-      <Tab.Screen name="Main" component={Main} />
+      <Tab.Screen name="Home" component={Main} />
       <Tab.Screen name="AddCar" component={AddCar} />
       <Tab.Screen name="AddService" component={AddService} />
       <Tab.Screen name="Details" component={Details} />
