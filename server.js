@@ -8,7 +8,7 @@ const mongoose = require("mongoose");
 const tokenModel = require("./models/token.model");
 const { creatRequest, getRequest, deleteRequest } = require("./controllers/request.controller");
 const { creatUser, getUser, userLogin } = require("./controllers/user.controller");
-const { creatCar, getCar, deleteCar } = require("./controllers/car.controller");
+const { creatCar, getCar, deleteCar, getOneCar } = require("./controllers/car.controller");
 
 const app = express();
 app.use(cors());
@@ -55,8 +55,9 @@ app.get("/request", getRequest);
 app.delete("/request/:requestId", deleteRequest);
 
 // // // // // // // Car endpoint // // // // // //
-app.post("/car", creatCar);
 app.get("/car", getCar);
+app.get("/car/:id", getOneCar);
+app.post("/car", creatCar);
 app.delete("/car/:carId", deleteCar);
 
 app.listen(PORT, () => {

@@ -28,6 +28,18 @@ const getCar = (req, res) => {
   getUserCar(res, user);
 };
 
+// // // // // // // GET One Car // // // // // //
+const getOneCar = (req, res) => {
+  const id = req.params.id;
+  carModel.findOne({ _id: id }, (error, data) => {
+    if (error) {
+      res.send(error.message);
+    } else {
+      res.send(data);
+    }
+  });
+};
+
 // // // // // // // DELETE // // // // // //
 const deleteCar = async (req, res) => {
   let carId = req.params.carId;
@@ -41,4 +53,4 @@ const deleteCar = async (req, res) => {
   });
 };
 
-module.exports = { creatCar, getCar, deleteCar };
+module.exports = { creatCar, getCar, deleteCar, getOneCar };
