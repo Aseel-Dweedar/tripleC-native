@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, Alert } from "react-native";
 import colors from "../assets/colors/colors";
 import RadioButtonGroup, { RadioButtonItem } from "expo-radio-button";
 import CarsList from "../components/CarsList";
@@ -46,7 +46,14 @@ const AddCar = ({ navigation }) => {
       })
       .catch((err) => {
         setCarsListErr(() => err);
-        alert("An error happens!! please try again later");
+        Alert.alert(
+          "Error",
+          "An error happens!! please try again later!",
+          [
+            { text: "OK", onPress: () => console.log("OK Pressed") }
+          ]
+        );
+        // alert("An error happens!! please try again later");
       });
   };
 
@@ -93,10 +100,25 @@ const AddCar = ({ navigation }) => {
           getCars();
         })
         .catch((err) => {
-          alert("An error happens!! please try again later");
+          Alert.alert(
+            "Error",
+            "An error happens!! please try again later!",
+            [
+              { text: "OK", onPress: () => console.log("OK Pressed") }
+            ]
+          );
+          // alert("An error happens!! please try again later");
         });
     } else {
-      alert("Please Fill All Fields!");
+      setIsLoading(false);
+      Alert.alert(
+        "⛔",
+        "Please Fill All Fields!",
+        [
+          { text: "OK", onPress: () => console.log("OK Pressed") }
+        ]
+      );
+      // alert("Please Fill All Fields!");
     }
   };
 

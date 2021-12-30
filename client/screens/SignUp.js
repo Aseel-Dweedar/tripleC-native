@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import colors from "../assets/colors/colors";
-import { StyleSheet, Text, TouchableOpacity, View, ActivityIndicator } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, ActivityIndicator, Alert } from "react-native";
 import AuthScreens from "../components/AuthScreens";
 import InputField from "../components/InputField";
 import CustomButton from "../components/CustomButton";
@@ -39,15 +39,37 @@ const SignUp = ({ navigation }) => {
         .post(`${API_URL}/user`, { username, firstName, lastName, password, phone })
         .then((axiosResponse) => {
           setIsLoading(false);
-          alert(axiosResponse.data);
+          setIsLoading(false);
+          Alert.alert(
+            "Done!",
+            axiosResponse.data,
+            [
+              { text: "OK", onPress: () => console.log("OK Pressed") }
+            ]
+          );
+          // alert(axiosResponse.data);
           navigation.navigate("SignIn");
         })
         .catch((err) => {
           setIsLoading(false);
-          alert("An error happens!! please try again later");
+          Alert.alert(
+            "Error",
+            "An error happens!! please try again later!",
+            [
+              { text: "OK", onPress: () => console.log("OK Pressed") }
+            ]
+          );
+          // alert("An error happens!! please try again later");
         });
     } else {
-      alert("Please Fill All Fields!");
+      Alert.alert(
+        "⛔",
+        "Please Fill All Fields!",
+        [
+          { text: "OK", onPress: () => console.log("OK Pressed") }
+        ]
+      );
+      // alert("Please Fill All Fields!");
     }
   };
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, Alert } from "react-native";
 import colors from "../assets/colors/colors";
 import { getUser } from "../assets/getUser";
 import axios from "axios";
@@ -43,7 +43,14 @@ const Details = ({ navigation, route }) => {
         setReqCar(() => axiosRes.data);
       })
       .catch((err) => {
-        alert("An error happens!! please try again later");
+        Alert.alert(
+          "Error",
+          "An error happens!! please try again later!",
+          [
+            { text: "OK", onPress: () => console.log("OK Pressed") }
+          ]
+        );
+        // alert("An error happens!! please try again later");
       });
   };
 

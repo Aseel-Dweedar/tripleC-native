@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import colors from "../assets/colors/colors";
-import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, Alert } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator } from "react-native";
 import AuthScreens from "../components/AuthScreens";
 import InputField from "../components/InputField";
 import CustomButton from "../components/CustomButton";

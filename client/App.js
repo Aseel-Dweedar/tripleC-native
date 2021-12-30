@@ -40,29 +40,48 @@ export default function App() {
               setUser(true);
               setRender(true);
             } catch (err) {
-              console.log("in catch 1");
-              alert("An error happens!! please try again later");
+              Alert.alert(
+                "Error",
+                "An error happens!! please try again later!",
+                [
+                  { text: "OK", onPress: () => console.log("OK Pressed") }
+                ]
+              );
+              // alert("An error happens!! please try again later");
               setIsLoading(false);
             }
           } else {
             setIsLoading(false);
-            alert(axiosResponse.data);
+            Alert.alert(
+              "⛔",
+              axiosResponse.data,
+              [
+                { text: "OK", onPress: () => console.log("OK Pressed") }
+              ]
+            );
+            // alert(`⛔ ${axiosResponse.data}`);
           }
         })
         .catch((err) => {
-          console.log("in catch 2");
           setIsLoading(false);
-          alert("An error happens!! please try again later");
+          Alert.alert(
+            "Error",
+            "An error happens!! please try again later!",
+            [
+              { text: "OK", onPress: () => console.log("OK Pressed") }
+            ]
+          );
+          // alert("An error happens!! please try again later");
         });
     } else {
-      // Alert.alert(
-      //   "Error",
-      //   "Please Enter Username & Password!",
-      //   [
-      //     { text: "OK", onPress: () => console.log("OK Pressed") }
-      //   ]
-      // );
-      alert("Please Enter Username & Password!");
+      Alert.alert(
+        "⚠️",
+        "Please Enter Username & Password!",
+        [
+          { text: "OK", onPress: () => console.log("OK Pressed") }
+        ]
+      );
+      // alert("Please Enter Username & Password!");
     }
   };
 

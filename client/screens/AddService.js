@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, ActivityIndicator } from "react-native";
+import { StyleSheet, View, Text, ActivityIndicator, Alert } from "react-native";
 import colors from "../assets/colors/colors";
 import InputField from "../components/InputField";
 import CustomButton from "../components/CustomButton";
@@ -92,10 +92,24 @@ const AddService = ({ navigation, route }) => {
         })
         .catch((err) => {
           setIsLoading(false);
-          alert("An error happens!! please try again later");
+          Alert.alert(
+            "Error",
+            "An error happens!! please try again later!",
+            [
+              { text: "OK", onPress: () => console.log("OK Pressed") }
+            ]
+          );
+          // alert("An error happens!! please try again later");
         });
     } else {
-      alert("Please Fill All Fields!");
+      Alert.alert(
+        "⛔",
+        "Please Fill All Fields!",
+        [
+          { text: "OK", onPress: () => console.log("OK Pressed") }
+        ]
+      );
+      // alert("Please Fill All Fields!");
     }
   };
 

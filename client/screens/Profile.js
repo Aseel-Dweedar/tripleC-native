@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, TouchableOpacity, Text, ActivityIndicator } from "react-native";
+import { StyleSheet, View, TouchableOpacity, Text, ActivityIndicator, Alert } from "react-native";
 import colors from "../assets/colors/colors";
 import axios from "axios";
 import RequestsList from "../components/RequestsList";
@@ -49,7 +49,14 @@ const Profile = (props) => {
       })
       .catch((err) => {
         setIsLoading(false);
-        alert("An error happens!! please try again later");
+        Alert.alert(
+          "Error",
+          "An error happens!! please try again later!",
+          [
+            { text: "OK", onPress: () => console.log("OK Pressed") }
+          ]
+        );
+        // alert("An error happens!! please try again later");
       });
   };
 

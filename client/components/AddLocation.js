@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import * as Location from "expo-location";
 import MapView from "react-native-maps";
 import * as Device from "expo-device";
-import { StyleSheet, Text, View, TextInput } from "react-native";
+import { StyleSheet, Text, View, TextInput, Alert } from "react-native";
 import colors from "../assets/colors/colors";
 import Checkbox from "expo-checkbox";
 
@@ -18,7 +18,14 @@ const AddLocation = (props) => {
         return;
       }
       let location = await Location.getCurrentPositionAsync({}).catch((err) => {
-        alert("Can't access your location, please check you location enabled ar your internet connection!");
+        Alert.alert(
+          "⛔",
+          "Can't access your location, please check you location enabled ar your internet connection!",
+          [
+            { text: "OK", onPress: () => console.log("OK Pressed") }
+          ]
+        );
+        // alert("Can't access your location, please check you location enabled ar your internet connection!");
         setChecked(false);
         return;
       });
