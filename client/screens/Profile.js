@@ -5,13 +5,16 @@ import axios from "axios";
 import RequestsList from "../components/RequestsList";
 import CustomButton from "../components/CustomButton";
 import { getUser } from "../assets/getUser";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import UserProfileData from "../components/UserProfileData";
 import { FontAwesome } from "@expo/vector-icons";
 
 const API_URL = process.env.API_URL;
 
-const Profile = ({ navigation }) => {
+const Profile = (props) => {
+
+  const { navigation, route } = props;
+  const { signOut } = route.params;
+
   const [requestsList, setRequestsList] = useState(null);
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -74,15 +77,6 @@ const Profile = ({ navigation }) => {
   };
 
   const showRequest = async (request) => navigation.navigate("Details", { requestDetail: request });
-
-  const signOut = async () => {
-    try {
-      await AsyncStorage.removeItem("user");
-      navigation.navigate("SignIn");
-    } catch (e) {
-      console.log(e);
-    }
-  };
 
   if (isLoading) {
     return (

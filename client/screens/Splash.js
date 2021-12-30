@@ -2,19 +2,8 @@ import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import logo from "../assets/img/finalLogo.png";
 import colors from "../assets/colors/colors";
-import { getUser } from "../assets/getUser";
 
-function Splash({ navigation }) {
-  setTimeout(() => {
-    getUser()
-      .then((user) => {
-        if (!user) navigation.navigate("SignIn");
-        else navigation.navigate("Main");
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, 1000);
+function Splash() {
 
   return (
     <View style={styles.container}>

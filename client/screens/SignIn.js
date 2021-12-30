@@ -1,54 +1,25 @@
 import React, { useState } from "react";
 import colors from "../assets/colors/colors";
-import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, Alert } from "react-native";
 import AuthScreens from "../components/AuthScreens";
 import InputField from "../components/InputField";
 import CustomButton from "../components/CustomButton";
 import Icons from "../components/Icons";
 import axios from "axios";
 
-const API_URL = process.env.API_URL;
+const SignIn = ({ navigation, route }) => {
 
-const SignIn = ({ navigation }) => {
+  const { signInBtnEvent, isLoading, } = route.params;
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+
 
   const onChangeUsername = (value) => {
     setUsername(value.replace(/[^a-z||^1-9||_]/g, ""));
   };
   const onChangePassword = (value) => {
     setPassword(value);
-  };
-
-  const signInBtnEvent = () => {
-    if (username && password) {
-      setIsLoading(true);
-      axios
-        .post(`${API_URL}/user/login`, { username, password })
-        .then(async (axiosResponse) => {
-          if (axiosResponse.data.token) {
-            try {
-              await AsyncStorage.setItem("user", JSON.stringify(axiosResponse.data));
-              setIsLoading(false);
-              navigation.navigate("Main");
-            } catch (err) {
-              alert("An error happens!! please try again later");
-              setIsLoading(false);
-            }
-          } else {
-            setIsLoading(false);
-            alert(axiosResponse.data);
-          }
-        })
-        .catch((err) => {
-          setIsLoading(false);
-          alert("An error happens!! please try again later");
-        });
-    } else {
-      alert("Please Enter Username & Password!");
-    }
   };
 
   const moveToSignUp = () => {
@@ -75,7 +46,7 @@ const SignIn = ({ navigation }) => {
     <AuthScreens>
       <View style={styles.container}>
         {inputDiv}
-        <CustomButton title="Sign-in" btn={styles.btn} btnText={styles.btnText} onPress={signInBtnEvent} />
+        <CustomButton title="Sign-in" btn={styles.btn} btnText={styles.btnText} onPress={() => signInBtnEvent(username, password)} />
         <View style={styles.textContainer}>
           <Text>Don't have an account?</Text>
           <TouchableOpacity onPress={moveToSignUp}>
