@@ -4,8 +4,7 @@ import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator } from "rea
 import AuthScreens from "../components/AuthScreens";
 import InputField from "../components/InputField";
 import CustomButton from "../components/CustomButton";
-import Icons from "../components/Icons";
-import axios from "axios";
+import SocialMedia from "../components/SocialMedia";
 
 const SignIn = ({ navigation, route }) => {
 
@@ -53,19 +52,7 @@ const SignIn = ({ navigation, route }) => {
             <Text style={styles.signUp}>Sign-Up!</Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.iconContainer}>
-          <Icons
-            name="facebook"
-            iconBackground={{ backgroundColor: colors.primary }}
-            icon={{ color: colors.lightGray }}
-          />
-          <Icons name="phone" iconBackground={{ backgroundColor: colors.primary }} icon={{ color: colors.lightGray }} />
-          <Icons
-            name="twitter"
-            iconBackground={{ backgroundColor: colors.primary }}
-            icon={{ color: colors.lightGray }}
-          />
-        </View>
+        <SocialMedia backgroundColor={colors.primary} color={colors.lightGray} />
       </View>
     </AuthScreens>
   );
@@ -97,10 +84,6 @@ const styles = StyleSheet.create({
     color: colors.primary,
     fontWeight: "bold",
     marginHorizontal: 5,
-  },
-  iconContainer: {
-    flexDirection: "row",
-    marginTop: 10,
   },
 });
 
