@@ -54,42 +54,24 @@ const Details = ({ route }) => {
     <View style={styles.container}>
       <View style={styles.topSection}>
         <View style={styles.requestTextContainer}>
-          <Text style={styles.welcome}>REQUEST DETAILS</Text>
-          <Text>{isTaken ? "Approved" : "Pending"}</Text>
+          <Text style={styles.titleText}>REQUEST DETAILS</Text>
+          <Text style={styles.pending}>{isTaken ? "Approved" : "Pending"}</Text>
         </View>
-        <View style={styles.requestTextContainer}>
-          <Text>Request name : </Text>
-          <Text>{name}</Text>
-        </View>
-        <View style={styles.requestTextContainer}>
-          <Text>Description : </Text>
-          <Text>{description}</Text>
-        </View>
-        <View style={styles.requestTextContainer}>
-          <Text>Phone number : </Text>
-          <Text>{phone}</Text>
-        </View>
+        <Text style={styles.reqText}>Request name : {`${name}`}</Text>
+        <Text style={styles.reqText}>Description : {`${description}`}</Text>
+        <Text style={styles.reqText}>Phone number : {`${phone}`}</Text>
       </View>
       <View style={styles.bottomSection}>
-        <Text style={styles.welcome}>Car Details</Text>
+        <Text style={styles.carSection}> 🚔 Car Details</Text>
         {reqCar && (
-          <View>
-            <View style={styles.requestTextContainer}>
-              <Text>Car Type : </Text>
-              <Text>{reqCar.type}</Text>
-            </View>
-            <View style={styles.requestTextContainer}>
-              <Text>Car Model : </Text>
-              <Text>{reqCar.model}</Text>
-            </View>
-            <View style={styles.requestTextContainer}>
-              <Text>Gasoline Type : </Text>
-              <Text>{reqCar.gasoline}</Text>
-            </View>
-            {reqCar.deleted && <Text>NOTE: you deleted this car</Text>}
+          <View style={styles.carDetailsContainer}>
+            <Text style={styles.carText}>Car Type : {`${reqCar.type}`}</Text>
+            <Text style={styles.carText}>Car Model : {`${reqCar.model}`}</Text>
+            <Text style={styles.carText}>Gasoline Type : {`${reqCar.gasoline}`}</Text>
+            {reqCar.deleted && <Text style={styles.deletingNote}>NOTE: you deleted this car</Text>}
           </View>
         )}
-        <Text style={styles.welcome}>Location Details</Text>
+        <Text style={styles.titleText}>Location Details</Text>
         {location.latitude && isDevice ? (
           <MapView
             initialRegion={{
@@ -116,13 +98,32 @@ const styles = StyleSheet.create({
     backgroundColor: colors.lightGray,
   },
   topSection: {
+    paddingHorizontal: 15,
     flex: 1,
     width: "100%",
     justifyContent: "center",
-    alignItems: "center",
   },
-  welcome: {
+  requestTextContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  titleText: {
     fontSize: 20,
+    color: "black",
+    fontWeight: "bold",
+    paddingBottom: 10,
+  },
+  pending: {
+    backgroundColor: "grey",
+    color: colors.lightGray,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 10,
+  },
+  reqText: {
+    fontSize: 15,
+    color: colors.primary,
+    paddingTop: 5,
   },
   bottomSection: {
     borderTopLeftRadius: 40,
@@ -130,11 +131,25 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     width: "100%",
     flex: 2.5,
-    justifyContent: "center",
-    alignItems: "center",
   },
-  requestTextContainer: {
-    flexDirection: "row",
+  carSection: {
+    fontSize: 20,
+    color: colors.lightGray,
+    paddingVertical: 10,
+    alignSelf: "center",
+  },
+  carDetailsContainer: {
+    paddingHorizontal: 15,
+  },
+  carText: {
+    fontSize: 15,
+    color: colors.lightGray,
+    paddingTop: 5,
+  },
+  deletingNote: {
+    fontSize: 12,
+    color: "tomato",
+    paddingTop: 5,
   },
   map: {
     flex: 1,
