@@ -8,7 +8,7 @@ import * as Device from "expo-device";
 
 const API_URL = process.env.API_URL;
 
-const Details = ({ navigation, route }) => {
+const Details = ({ route }) => {
   const [isDevice, setIsDevice] = useState(Device.brand);
   const [user, setUser] = useState(null);
   const [reqCar, setReqCar] = useState(null);
@@ -43,13 +43,9 @@ const Details = ({ navigation, route }) => {
         setReqCar(() => axiosRes.data);
       })
       .catch((err) => {
-        Alert.alert(
-          "Error",
-          "An error happens!! please try again later!",
-          [
-            { text: "OK", onPress: () => console.log("OK Pressed") }
-          ]
-        );
+        Alert.alert("Error", "An error happens!! please try again later!", [
+          { text: "OK", onPress: () => console.log("OK Pressed") },
+        ]);
         // alert("An error happens!! please try again later");
       });
   };
@@ -124,6 +120,9 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
+  },
+  welcome: {
+    fontSize: 20,
   },
   bottomSection: {
     borderTopLeftRadius: 40,

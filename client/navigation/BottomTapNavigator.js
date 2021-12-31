@@ -15,8 +15,8 @@ const BottomTabNavigator = (props) => {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: () => {
-          if (route.name === "Home") {
-            return <AntDesign name="home" size={22} color={colors.secondary} />;
+          if (route.name === "Back") {
+            return <AntDesign name="back" size={22} color={colors.secondary} />;
           } else if (route.name === "Profile") {
             return <FontAwesome name="user" size={22} color={colors.secondary} />;
           } else if (route.name === "Contact") {
@@ -42,7 +42,7 @@ const BottomTabNavigator = (props) => {
         inactiveBackgroundColor: "#E6E6E6",
       }}
     >
-      <Tab.Screen name="Home" component={MainStackNavigator} initialParams={props} />
+      <Tab.Screen name="Back" component={MainStackNavigator} initialParams={props} />
       <Tab.Screen name="Profile" component={Profile} initialParams={{ signOut }} />
       <Tab.Screen name="Contact" component={Contact} />
     </Tab.Navigator>

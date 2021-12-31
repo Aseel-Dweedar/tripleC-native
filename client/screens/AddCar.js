@@ -46,13 +46,9 @@ const AddCar = ({ navigation }) => {
       })
       .catch((err) => {
         setCarsListErr(() => err);
-        Alert.alert(
-          "Error",
-          "An error happens!! please try again later!",
-          [
-            { text: "OK", onPress: () => console.log("OK Pressed") }
-          ]
-        );
+        Alert.alert("Error", "An error happens!! please try again later!", [
+          { text: "OK", onPress: () => console.log("OK Pressed") },
+        ]);
         // alert("An error happens!! please try again later");
       });
   };
@@ -100,24 +96,14 @@ const AddCar = ({ navigation }) => {
           getCars();
         })
         .catch((err) => {
-          Alert.alert(
-            "Error",
-            "An error happens!! please try again later!",
-            [
-              { text: "OK", onPress: () => console.log("OK Pressed") }
-            ]
-          );
+          Alert.alert("Error", "An error happens!! please try again later!", [
+            { text: "OK", onPress: () => console.log("OK Pressed") },
+          ]);
           // alert("An error happens!! please try again later");
         });
     } else {
       setIsLoading(false);
-      Alert.alert(
-        "⛔",
-        "Please Fill All Fields!",
-        [
-          { text: "OK", onPress: () => console.log("OK Pressed") }
-        ]
-      );
+      Alert.alert("⛔", "Please Fill All Fields!", [{ text: "OK", onPress: () => console.log("OK Pressed") }]);
       // alert("Please Fill All Fields!");
     }
   };
@@ -134,7 +120,7 @@ const AddCar = ({ navigation }) => {
       <View style={styles.addCarContainer}>
         <View style={styles.inputContainer}>
           <InputField placeholder="Car Type" name="car" onChangeText={onChangCarType} value={carType} />
-          <InputField placeholder="Car Model" name="car" onChangeText={onChangeCarModel} value={carModel} />
+          <InputField placeholder="Car Model" name="calendar" onChangeText={onChangeCarModel} value={carModel} />
           <View>
             <Text style={{ margin: 10, fontWeight: "bold" }}>Choose gasoline type :</Text>
             <RadioButtonGroup

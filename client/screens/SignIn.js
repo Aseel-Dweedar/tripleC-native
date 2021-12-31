@@ -7,12 +7,10 @@ import CustomButton from "../components/CustomButton";
 import SocialMedia from "../components/SocialMedia";
 
 const SignIn = ({ navigation, route }) => {
-
-  const { signInBtnEvent, isLoading, } = route.params;
+  const { signInBtnEvent, isLoading } = route.params;
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
 
   const onChangeUsername = (value) => {
     setUsername(value.replace(/[^a-z||^1-9||_]/g, ""));
@@ -35,7 +33,7 @@ const SignIn = ({ navigation, route }) => {
   } else {
     inputDiv = (
       <View style={styles.InputContainer}>
-        <InputField placeholder="User name" name="user-o" onChangeText={onChangeUsername} value={username} />
+        <InputField placeholder="User name" name="user" onChangeText={onChangeUsername} value={username} />
         <InputField placeholder="Password" name="lock" onChangeText={onChangePassword} value={password} />
       </View>
     );
@@ -45,7 +43,12 @@ const SignIn = ({ navigation, route }) => {
     <AuthScreens>
       <View style={styles.container}>
         {inputDiv}
-        <CustomButton title="Sign-in" btn={styles.btn} btnText={styles.btnText} onPress={() => signInBtnEvent(username, password)} />
+        <CustomButton
+          title="Sign-in"
+          btn={styles.btn}
+          btnText={styles.btnText}
+          onPress={() => signInBtnEvent(username, password)}
+        />
         <View style={styles.textContainer}>
           <Text>Don't have an account?</Text>
           <TouchableOpacity onPress={moveToSignUp}>

@@ -10,12 +10,14 @@ const Contact = () => {
     <View style={styles.container}>
       <View style={styles.logoContainer}>
         <Image source={logo} style={styles.img} />
-        <Text style={styles.logoText} >Triple-C</Text>
+        <Text style={styles.logoText}>Triple-C</Text>
       </View>
       <View style={styles.contactContainer}>
-        <Text style={styles.needHelp} >Need Help ?</Text>
-        <Text style={styles.contactUs} >Its Our Pleasure To Help.. </Text>
-        <ContactIcons name="phone" />
+        <Text style={styles.needHelp}>Need Help ?</Text>
+        <Text style={styles.contactUs}>Its Our Pleasure To Help.. </Text>
+        <ContactIcons name="phone">+962 786 591 423</ContactIcons>
+        <ContactIcons name="fax">+962 692 611 589</ContactIcons>
+        <ContactIcons name="envelope-square">info@triple-c.jo</ContactIcons>
         <SocialMedia backgroundColor={colors.lightGray} color="black" />
       </View>
     </View>
@@ -25,14 +27,13 @@ const Contact = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 3,
-    paddingTop: 40,
     backgroundColor: colors.lightGray,
   },
   logoContainer: {
     flex: 1,
-    paddingHorizontal: 30,
+    padding: 20,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   img: {
     resizeMode: "contain",
@@ -43,26 +44,25 @@ const styles = StyleSheet.create({
     marginTop: 10,
     color: colors.primary,
     fontSize: 20,
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   contactContainer: {
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
     backgroundColor: colors.primary,
-    padding: 20,
+    padding: 30,
     flex: 2,
+    justifyContent: "center",
   },
   needHelp: {
     color: colors.lightGray,
-    fontSize: 20,
-    fontWeight: "bold"
+    fontSize: 22,
+    fontWeight: "bold",
   },
   contactUs: {
     color: colors.lightGray,
-    fontSize: 15,
-    fontWeight: "bold"
-  }
+    fontSize: 18,
+  },
 });
-
 
 export default Contact;

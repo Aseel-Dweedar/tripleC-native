@@ -40,35 +40,19 @@ const SignUp = ({ navigation }) => {
         .then((axiosResponse) => {
           setIsLoading(false);
           setIsLoading(false);
-          Alert.alert(
-            "Done!",
-            axiosResponse.data,
-            [
-              { text: "OK", onPress: () => console.log("OK Pressed") }
-            ]
-          );
+          Alert.alert("Done!", axiosResponse.data, [{ text: "OK", onPress: () => console.log("OK Pressed") }]);
           // alert(axiosResponse.data);
           navigation.navigate("SignIn");
         })
         .catch((err) => {
           setIsLoading(false);
-          Alert.alert(
-            "Error",
-            "An error happens!! please try again later!",
-            [
-              { text: "OK", onPress: () => console.log("OK Pressed") }
-            ]
-          );
+          Alert.alert("Error", "An error happens!! please try again later!", [
+            { text: "OK", onPress: () => console.log("OK Pressed") },
+          ]);
           // alert("An error happens!! please try again later");
         });
     } else {
-      Alert.alert(
-        "⛔",
-        "Please Fill All Fields!",
-        [
-          { text: "OK", onPress: () => console.log("OK Pressed") }
-        ]
-      );
+      Alert.alert("⛔", "Please Fill All Fields!", [{ text: "OK", onPress: () => console.log("OK Pressed") }]);
       // alert("Please Fill All Fields!");
     }
   };
@@ -87,8 +71,8 @@ const SignUp = ({ navigation }) => {
   } else {
     inputDiv = (
       <View style={styles.InputContainer}>
-        <InputField placeholder="User name" name="user-o" onChangeText={onChangeUsername} value={username} />
-        <InputField placeholder="First Name" name="user-o" onChangeText={onChangeFirstName} value={firstName} />
+        <InputField placeholder="User name" name="users" onChangeText={onChangeUsername} value={username} />
+        <InputField placeholder="First Name" name="user" onChangeText={onChangeFirstName} value={firstName} />
         <InputField placeholder="Last Name" name="user-o" onChangeText={onChangeLastName} value={lastName} />
         <InputField placeholder="Password" name="lock" onChangeText={onChangePassword} value={password} />
         <InputField placeholder="Phone" name="phone" onChangeText={onChangePhone} value={phone} placeholder="+962" />
