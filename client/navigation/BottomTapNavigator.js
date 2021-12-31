@@ -10,7 +10,6 @@ import { MainStackNavigator } from "./NativeStackNavigator";
 const Tab = createBottomTabNavigator();
 
 const BottomTabNavigator = (props) => {
-  const signOut = props.signOut;
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -37,13 +36,9 @@ const BottomTabNavigator = (props) => {
         tabBarInactiveTintColor: colors.primary,
         headerShown: false,
       })}
-      tabBarOptions={{
-        activeBackgroundColor: "#E6E6E6",
-        inactiveBackgroundColor: "#E6E6E6",
-      }}
     >
       <Tab.Screen name="Back" component={MainStackNavigator} initialParams={props} />
-      <Tab.Screen name="Profile" component={Profile} initialParams={{ signOut }} />
+      <Tab.Screen name="Profile" component={Profile} initialParams={props} />
       <Tab.Screen name="Contact" component={Contact} />
     </Tab.Navigator>
   );
