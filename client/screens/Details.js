@@ -71,22 +71,26 @@ const Details = ({ route }) => {
             {reqCar.deleted && <Text style={styles.deletingNote}>NOTE: you deleted this car</Text>}
           </View>
         )}
-        <Text style={styles.titleText}>Location Details</Text>
-        {location.latitude && isDevice ? (
-          <MapView
-            initialRegion={{
-              latitude: location.latitude,
-              longitude: location.longitude,
-              latitudeDelta: 0.01,
-              longitudeDelta: 0.01,
-            }}
-            style={styles.map}
-          >
-            <MapView.Marker coordinate={location} title="My Marker" description="Your Location" />
-          </MapView>
-        ) : (
-          <Text>{location.textLocation}</Text>
-        )}
+        <View style={styles.locationTextContainer}>
+          <Text style={styles.locationText}>📌 Location Details</Text>
+        </View>
+        <View style={styles.mapContainer}>
+          {location.latitude && isDevice ? (
+            <MapView
+              initialRegion={{
+                latitude: location.latitude,
+                longitude: location.longitude,
+                latitudeDelta: 0.01,
+                longitudeDelta: 0.01,
+              }}
+              style={styles.map}
+            >
+              <MapView.Marker coordinate={location} title="My Marker" description="Your Location" />
+            </MapView>
+          ) : (
+            <Text style={styles.carText}>{location.textLocation}</Text>
+          )}
+        </View>
       </View>
     </View>
   );
@@ -108,7 +112,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   titleText: {
-    fontSize: 20,
+    fontSize: 18,
     color: "black",
     fontWeight: "bold",
     paddingBottom: 10,
@@ -133,7 +137,7 @@ const styles = StyleSheet.create({
     flex: 2.5,
   },
   carSection: {
-    fontSize: 20,
+    fontSize: 18,
     color: colors.lightGray,
     paddingVertical: 10,
     alignSelf: "center",
@@ -151,8 +155,23 @@ const styles = StyleSheet.create({
     color: "tomato",
     paddingTop: 5,
   },
-  map: {
+  locationTextContainer: {
+    padding: 5,
+    marginTop: 10,
+    backgroundColor: colors.lightGray,
+    alignItems: "center",
+  },
+  locationText: {
+    fontSize: 18,
+    color: colors.primary,
+  },
+  mapContainer: {
     flex: 1,
+    width: "100%",
+    height: "100%",
+    padding: 15,
+  },
+  map: {
     width: "100%",
     height: "100%",
   },

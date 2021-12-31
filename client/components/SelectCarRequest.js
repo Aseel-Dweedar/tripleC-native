@@ -27,7 +27,7 @@ const SelectCarRequest = (props) => {
                   value={car._id}
                   label={
                     <Text style={{ color: colors.lightGray }}>
-                      {car.type} - {car.year}
+                      {car.type} - {car.model}
                     </Text>
                   }
                   key={idx}
